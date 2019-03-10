@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[hive cli]]></title>
+    <url>%2F2019%2F03%2F10%2Fhive-cli%2F</url>
+    <content type="text"><![CDATA[Hive常用命令创建表： 1CREATE TABLE pokes (foo INT, bar STRING); 创建一个新表，结构与其他一样： 1create table new_table like records; 创建分区表： 1create table logs(ts bigint,line string) partitioned by (dt String,country String); 加载分区表数据： 1load data local inpath '/home/Hadoop/input/hive/partitions/file1' into table logs partition (dt='2001-01-01',country='GB'); 展示表中有多少分区： 1show partitions logs; 展示所有表： 1SHOW TABLES; 显示表的结构信息： 1DESCRIBE invites; 更新表的名称： 1ALTER TABLE source RENAME TO target; 添加新一列： 1ALTER TABLE invites ADD COLUMNS (new_col2 INT COMMENT 'a comment'); 添加新的一行： 1INSERT INTO test(name,pwd,createdate) values('name1','pwd1','2017-06-20 14:14:09'); 删除表： 1DROP TABLE records; 删除表中数据，但要保持表的结构定义： 1TRUNCATE TABLE table_name 从本地文件加载数据： 1LOAD DATA LOCAL INPATH '/home/hadoop/input/ncdc/micro-tab/sample.txt' OVERWRITE INTO TABLE records; 显示所有函数： 1show functions; 查看函数用法： 1describe function substr; 内连接： 1SELECT sales., things. FROM sales JOIN things ON (sales.id = things.id); 查看hive为某个查询使用多少个MapReduce作业: 1Explain SELECT sales., things. FROM sales JOIN things ON (sales.id = things.id); 外连接： 1SELECT sales., things. FROM sales LEFT OUTER JOIN things ON (sales.id = things.id); 创建视图： 1CREATE VIEW valid_records AS SELECT * FROM records2 WHERE temperature !=9999; INSERT OVERWRITE： 1INSERT OVERWRITE table tablename1 select a, b, c from tablename2; 参考：https://www.jianshu.com/p/a8e259b973ef]]></content>
+      <categories>
+        <category>大数据</category>
+      </categories>
+      <tags>
+        <tag>hive</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Hello World]]></title>
     <url>%2F2018%2F06%2F07%2Fhello-world%2F</url>
     <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
