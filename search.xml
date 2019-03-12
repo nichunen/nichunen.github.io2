@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[OSI七层模型的通俗理解]]></title>
+    <url>%2F2019%2F03%2F12%2Fosi-tcpip%2F</url>
+    <content type="text"><![CDATA[OSI七层模型的通俗理解 以你和你女朋友以书信的方式进行通信为例。 物理层：运输工具，比如火车、汽车 数据链路层：相当于货物核对单，表明里面有些什么东西，接受的时候确认一下是否正确（CRC检验） 网络层：相当于邮政局或快递公司地址（IP地址），能正确到达对方 传输层：信封（TCP协议是挂号信，是可靠的；UDP协议是平信，尽力送到对方，不保证一点送到对方） 会话层：相当于邮票，优质邮票寄一封信，相当与一个会话 表示层：你用普通话还是用方言？或者是英语？ 应用层：你可以说你的内容了，可以说是你爱她，也可以说你恨她。]]></content>
+      <categories>
+        <category>网络</category>
+      </categories>
+      <tags>
+        <tag>网络协议</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[使用gogs安装本地git服务(Centos环境)]]></title>
     <url>%2F2019%2F03%2F11%2Fgogs-install%2F</url>
     <content type="text"><![CDATA[使用gogs安装本地git服务(Centos环境)安装数据库Gogs支持MySQL、PostgreSQL、SQLite3、TiDB。安装过程这里不赘述，我们使用的是MySQL。 安装git1yum install -y git 添加git用户（gogs期望用git用户操作）1sudo useradd git 下载并安装根据自己的linux版本在 https://dl.gogs.io/ 下载安装包，linux版本根据uname -a查看 1wget https://dl.gogs.io/0.11.86/gogs_0.11.86_linux_amd64.tar.gz 解压 1tar -zxvf gogs_0.11.86_linux_amd64.tar.gz 进入解压的目录，执行 12cd gogs/./gogs web 打开${ip}:3000页面，出现如下配置页面 配置完数据库、端口、用户信息等 运行gogsControl+C暂停当前gogs进程，后台运行gogs 1nohup ./gogs web &amp; 打开${ip}:3000页面，注册后登陆]]></content>
