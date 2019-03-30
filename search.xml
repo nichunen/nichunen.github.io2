@@ -1,6 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Kylin的任务调度介绍]]></title>
+    <url>%2F2019%2F03%2F30%2FKylin-s-job-scheduler%2F</url>
+    <content type="text"><![CDATA[撰写中]]></content>
+      <categories>
+        <category>大数据</category>
+      </categories>
+      <tags>
+        <tag>kylin</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Kylin的元数据-任务]]></title>
+    <url>%2F2019%2F03%2F30%2FKylin-s-metadata-execute%2F</url>
+    <content type="text"><![CDATA[撰写中]]></content>
+      <categories>
+        <category>大数据</category>
+      </categories>
+      <tags>
+        <tag>kylin</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Kylin的元数据基础]]></title>
+    <url>%2F2019%2F03%2F30%2FKylin-s-metadata-base%2F</url>
+    <content type="text"><![CDATA[撰写中]]></content>
+      <categories>
+        <category>大数据</category>
+      </categories>
+      <tags>
+        <tag>kylin</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[OSI七层模型的通俗理解]]></title>
     <url>%2F2019%2F03%2F12%2Fosi-tcpip%2F</url>
     <content type="text"><![CDATA[OSI七层模型的通俗理解 以你和你女朋友以书信的方式进行通信为例。 物理层：运输工具，比如火车、汽车 数据链路层：相当于货物核对单，表明里面有些什么东西，接受的时候确认一下是否正确（CRC检验） 网络层：相当于邮政局或快递公司地址（IP地址），能正确到达对方 传输层：信封（TCP协议是挂号信，是可靠的；UDP协议是平信，尽力送到对方，不保证一点送到对方） 会话层：相当于邮票，优质邮票寄一封信，相当与一个会话 表示层：你用普通话还是用方言？或者是英语？ 应用层：你可以说你的内容了，可以说是你爱她，也可以说你恨她。]]></content>
