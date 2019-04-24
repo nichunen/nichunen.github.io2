@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Kylin查询基本原理]]></title>
+    <url>%2F2019%2F04%2F17%2Fquery-on-kylin-cube%2F</url>
+    <content type="text"><![CDATA[Kylin的基本架构Apache Kylin™是一个开源的分布式分析引擎，提供Hadoop/Spark之上的SQL查询接口及多维分析（OLAP）能力以支持超大规模数据，最初由eBay Inc. 开发并贡献至开源社区。它能在亚秒内查询巨大的Hive表、Kafka流式数据表、关系型数据库表。 Apache Kylin的基本架构图如下 Kylin的基本查询步骤进行词法分析以一个sql为例： 123456selectWEEK_BEG_DT, sum(PRICE)fromTEST_KYLIN_FACT as fact inner join TEST_CAL_DT as dton fact.CAL_DT = dt.CAL_DT wherefact.CAL_DT &gt;= ‘2017-01-01’ 词法分析的结果为 仅仅一个词法分析的结果是无法被执行的 生成逻辑执行计划生成物理执行计划执行查询]]></content>
+      <categories>
+        <category>大数据</category>
+      </categories>
+      <tags>
+        <tag>kylin</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Kylin重要jira issue状态]]></title>
+    <url>%2F2019%2F04%2F16%2Fkylin-jiras%2F</url>
+    <content type="text"><![CDATA[Id 状态 Release 说明 KYLIN-3536 C 2.5.0 使用Kylin的PrepareStatement会cache住OLAPContext，新的segment构建成功后，也不会查最新的结果 KYLIN-3522]]></content>
+      <categories>
+        <category>大数据</category>
+      </categories>
+      <tags>
+        <tag>kylin</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Kylin的任务调度介绍]]></title>
     <url>%2F2019%2F03%2F30%2FKylin-s-job-scheduler%2F</url>
     <content type="text"><![CDATA[撰写中]]></content>
