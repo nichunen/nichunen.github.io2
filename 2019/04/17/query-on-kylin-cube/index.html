@@ -89,7 +89,8 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1g25gf5rus1j315o0k5ta3.jpg">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79gy1g2dxptqu46j31rk0o6dk0.jpg">
-<meta property="og:updated_time" content="2019-04-24T11:21:39.268Z">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1g2dyqsxq81j311k0oyjxq.jpg">
+<meta property="og:updated_time" content="2019-04-25T02:48:30.490Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kylin查询基本原理">
 <meta name="twitter:description" content="Kylin的基本架构Apache Kylin™是一个开源的分布式分析引擎，提供Hadoop/Spark之上的SQL查询接口及多维分析（OLAP）能力以支持超大规模数据，最初由eBay Inc. 开发并贡献至开源社区。它能在亚秒内查询巨大的Hive表、Kafka流式数据表、关系型数据库表。 Apache Kylin的基本架构图如下  Kylin的基本查询步骤进行词法分析以一个sql为例： 12345">
@@ -394,8 +395,17 @@
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span></span><br><span class="line">WEEK_BEG_DT, <span class="keyword">sum</span>(PRICE)</span><br><span class="line"><span class="keyword">from</span></span><br><span class="line">TEST_KYLIN_FACT <span class="keyword">as</span> fact <span class="keyword">inner</span> <span class="keyword">join</span> TEST_CAL_DT <span class="keyword">as</span> dt</span><br><span class="line"><span class="keyword">on</span> fact.CAL_DT = dt.CAL_DT <span class="keyword">where</span></span><br><span class="line">fact.CAL_DT &gt;= ‘<span class="number">2017</span><span class="number">-01</span><span class="number">-01</span>’</span><br></pre></td></tr></table></figure>
 <p>词法分析的结果为</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g2dxptqu46j31rk0o6dk0.jpg" alt></p>
-<p>仅仅一个词法分析的结果是无法被执行的</p>
-<h4 id="生成逻辑执行计划"><a href="#生成逻辑执行计划" class="headerlink" title="生成逻辑执行计划"></a>生成逻辑执行计划</h4><h4 id="生成物理执行计划"><a href="#生成物理执行计划" class="headerlink" title="生成物理执行计划"></a>生成物理执行计划</h4><h4 id="执行查询"><a href="#执行查询" class="headerlink" title="执行查询"></a>执行查询</h4>
+<p>由select，join和where三部分组成，仅仅一个词法分析的结果是无法被执行的</p>
+<h4 id="生成逻辑执行计划"><a href="#生成逻辑执行计划" class="headerlink" title="生成逻辑执行计划"></a>生成逻辑执行计划</h4><p>上述词法分析随后被转为如下的逻辑计划：</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g2dyqsxq81j311k0oyjxq.jpg" alt></p>
+<ol>
+<li>from里有两个表，有join关系，先进行join</li>
+<li>对表进行project，往上暴露数据</li>
+<li>词法中有where条件与group by的情况下，会有对应的filter和aggregate算子操作</li>
+</ol>
+<p>在kylin使用apache calcite进行词法分析及逻辑计划的生成，并会进行逻辑执行计划-》物理执行计划的优化。kylin会将图中画圈的部分替换为cube数据，从而达到加速查询的目的。</p>
+<h4 id="生成物理执行计划"><a href="#生成物理执行计划" class="headerlink" title="生成物理执行计划"></a>生成物理执行计划</h4><p>在kylin中对表的join进行替换，即可表示为下图</p>
+<h4 id="执行查询"><a href="#执行查询" class="headerlink" title="执行查询"></a>执行查询</h4>
       
     </div>
     <div>

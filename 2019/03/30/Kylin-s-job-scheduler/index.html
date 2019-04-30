@@ -79,18 +79,22 @@
 
 
 
-<meta name="description" content="撰写中">
+<meta name="description" content="Kylin的任务调度介绍Kylin的任务调度模式采用的是生产者-消费者模式。  Kylin的构建、合并、优化segment任务的入口为EngineFactory的createBatchCubingJob, createBatchMergeJob, createBatchOptimizeJob方法。EngineFactory是一个工厂类，可以根据不同的配置选择不同的cube构建类型（Batch或者S">
 <meta name="keywords" content="kylin">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kylin的任务调度介绍">
 <meta property="og:url" content="http://yoursite.com/2019/03/30/Kylin-s-job-scheduler/index.html">
 <meta property="og:site_name" content="飞龙在天的博客">
-<meta property="og:description" content="撰写中">
+<meta property="og:description" content="Kylin的任务调度介绍Kylin的任务调度模式采用的是生产者-消费者模式。  Kylin的构建、合并、优化segment任务的入口为EngineFactory的createBatchCubingJob, createBatchMergeJob, createBatchOptimizeJob方法。EngineFactory是一个工厂类，可以根据不同的配置选择不同的cube构建类型（Batch或者S">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-30T07:26:57.641Z">
+<meta property="og:image" content="http://pqi7fpfop.bkt.clouddn.com/2019-04-30-090755.png">
+<meta property="og:image" content="http://pqi7fpfop.bkt.clouddn.com/2019-04-30-092920.png">
+<meta property="og:image" content="http://pqi7fpfop.bkt.clouddn.com/2019-04-30-093909.png">
+<meta property="og:updated_time" content="2019-04-30T09:39:55.876Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kylin的任务调度介绍">
-<meta name="twitter:description" content="撰写中">
+<meta name="twitter:description" content="Kylin的任务调度介绍Kylin的任务调度模式采用的是生产者-消费者模式。  Kylin的构建、合并、优化segment任务的入口为EngineFactory的createBatchCubingJob, createBatchMergeJob, createBatchOptimizeJob方法。EngineFactory是一个工厂类，可以根据不同的配置选择不同的cube构建类型（Batch或者S">
+<meta name="twitter:image" content="http://pqi7fpfop.bkt.clouddn.com/2019-04-30-090755.png">
 
 
 
@@ -384,7 +388,30 @@
       
 
       
-        <h1 id="撰写中"><a href="#撰写中" class="headerlink" title="撰写中"></a>撰写中</h1>
+        <h1 id="Kylin的任务调度介绍"><a href="#Kylin的任务调度介绍" class="headerlink" title="Kylin的任务调度介绍"></a>Kylin的任务调度介绍</h1><p>Kylin的任务调度模式采用的是生产者-消费者模式。</p>
+<p><img src="http://pqi7fpfop.bkt.clouddn.com/2019-04-30-090755.png" alt="image-20190430170743788"></p>
+<p>Kylin的构建、合并、优化segment任务的入口为<code>EngineFactory</code>的<code>createBatchCubingJob</code>, <code>createBatchMergeJob</code>, <code>createBatchOptimizeJob</code>方法。<code>EngineFactory</code>是一个工厂类，可以根据不同的配置选择不同的cube构建类型（Batch或者Streaming）和不同的cube构建算法（Batch Cube有不同的构建算法）。</p>
+<p>Kylin的可执行任务都被表示为一个<code>Executable</code>对象，基本的UML图如下</p>
+<p><img src="http://pqi7fpfop.bkt.clouddn.com/2019-04-30-092920.png" alt="Executable"></p>
+<p><code>Executable</code>的核心方法是<code>execute</code>，每个实现类可以定义Job的具体执行逻辑。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Executable</span> </span>&#123;</span><br><span class="line">    <span class="function">String <span class="title">getId</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">String <span class="title">getName</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//定义Job的具体执行逻辑</span></span><br><span class="line">    <span class="comment">//参数ExecutableContext Job的上下文</span></span><br><span class="line">    <span class="comment">//结果ExecuteResult Job的状态和输出</span></span><br><span class="line">    <span class="function">ExecuteResult <span class="title">execute</span><span class="params">(ExecutableContext executableContext)</span> <span class="keyword">throws</span> ExecuteException</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//获取Job运行状态</span></span><br><span class="line">    <span class="function">ExecutableState <span class="title">getStatus</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">Output <span class="title">getOutput</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">isRunnable</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="comment">//获取Job的执行参数</span></span><br><span class="line">    <span class="function">Map&lt;String, String&gt; <span class="title">getParams</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>抽象类<code>AbstractExecutable</code>实现了<code>Executable</code>接口，核心是实现了<code>execute</code>方法，为了清晰的定义每个Job的运行状态，AbstractExecutable将<code>execute</code>方法细化为<code>onExecuteStart</code>，<code>doWork</code>，<code>onExecuteError</code>，<code>onExecuteFinished</code>等阶段。其中execute方法修饰符为final，onExecuteStart，onExecuteError，onExecuteFinished方法修饰符为protected，doWork方法修饰符为protected abstract，用于子类根据自己的具体逻辑重写此方法。</p>
+<p><code>execute</code>方法的关键代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> ExecuteResult <span class="title">execute</span><span class="params">(ExecutableContext executableContext)</span> <span class="keyword">throws</span> ExecuteException </span>&#123;</span><br><span class="line">        <span class="comment">//Job的状态从Ready 变为 Running</span></span><br><span class="line">        onExecuteStart(executableContext);</span><br><span class="line">        ...</span><br><span class="line">        <span class="comment">//不同的Job在这里实现具体逻辑</span></span><br><span class="line">        result = doWork(executableContext);</span><br><span class="line">        ...</span><br><span class="line">        <span class="keyword">if</span> (exception != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">//Job的状态从Ready 变为 Error</span></span><br><span class="line">            onExecuteError(exception, executableContext);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//Job的状态从Ready 变为 Succeed or Error or Discard</span></span><br><span class="line">        onExecuteFinished(result, executableContext);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>AbstractExecutable的具体直接实现类<code>主要</code>有ShellExecutable，HadoopShellExecutable，MapReduceExecutable，主要是根据自身的具体逻辑重写了<code>doWork</code>方法。</p>
+<ul>
+<li><code>ShellExecutable</code>主要用来执行Shell 命令可以直接执行的Job，像计算Hive表行数等Job。</li>
+<li><code>HadoopShellExecutable</code>主要用来执行依赖Hadoop环境且用Shell执行的Job，像建字典，建立HBase表，Bulkload HFile等Job。</li>
+<li><code>MapReduceExecutable</code>主要用来执行MapReduce类型的Job，像计算列基数，计算Cuboid， 生成HFile等Job。</li>
+</ul>
+<p>前面提到是<code>CubingJob</code>将构建cube的每一步job串了起来，其实<code>CubingJob</code>继承了<code>DefaultChainedExecutable</code>，DefaultChainedExecutable类继承了 AbstractExecutable类并实现了<code>ChainedExecutable</code>接口。CubingJob 主要是为Job关联了cube和segment的相关信息，串连所有Job的任务都是DefaultChainedExecutable类实现的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public interface ChainedExecutable extends Executable &#123;</span><br><span class="line">    //获取所有子Job</span><br><span class="line">    List&lt;? extends AbstractExecutable&gt; getTasks();</span><br><span class="line">    //添加子Job</span><br><span class="line">    void addTask(AbstractExecutable executable);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>之前提到在生成Job的时候，<code>CubingJob</code>通过<code>addTask</code>方法将所有子Job串连了起来。那么<code>DefaultChainedExecutable</code>到底是如何串连起所有子Job呢？关键在其重写的<code>doWork</code>方法里：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> ExecuteResult <span class="title">doWork</span><span class="params">(ExecutableContext context)</span> <span class="keyword">throws</span> ExecuteException </span>&#123;</span><br><span class="line">        List&lt;? extends Executable&gt; executables = getTasks();<span class="comment">//获取所有子Job</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; executables.size(); ++i) &#123;</span><br><span class="line">            Executable subTask = executables.get(i);</span><br><span class="line">            ExecutableState state = subTask.getStatus();</span><br><span class="line">            <span class="keyword">if</span> (state == ExecutableState.RUNNING) &#123;</span><br><span class="line">                <span class="comment">//子Job正在执行，等待它完成</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (state == ExecutableState.ERROR) &#123;</span><br><span class="line">               <span class="comment">//子Job执行失败，抛出异常</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (subTask.isRunnable()) &#123;</span><br><span class="line">               <span class="comment">//每个Job在初始化后是Ready状态，所以isRunnable()是True，当子Job是Ready状态时，就开始执行。</span></span><br><span class="line">                <span class="keyword">return</span> subTask.execute(context);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ExecuteResult(ExecuteResult.State.SUCCEED, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><code>DefaultChainedExecutable</code> 也重写了<code>onExecuteFinished</code>方法，来根据所有子Job的状态更新整个Job的最终状态。</p>
+<p>Kylin默认通过<code>DefaultScheduler</code>进行任务的调度，其核心逻辑是十分简单的，有两个线程池，一个线程池用来抓取所有Job的状态信息，一个线程池来执行具体的Job。基本的逻辑过程如下：</p>
+<p><img src="http://pqi7fpfop.bkt.clouddn.com/2019-04-30-093909.png" alt="image-20190430173905136"></p>
+
       
     </div>
     <div>
@@ -648,7 +675,7 @@ var jiathis_config={
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#撰写中"><span class="nav-number">1.</span> <span class="nav-text">撰写中</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Kylin的任务调度介绍"><span class="nav-number">1.</span> <span class="nav-text">Kylin的任务调度介绍</span></a></li></ol></div>
             
 
           </div>
