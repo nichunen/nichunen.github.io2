@@ -90,7 +90,7 @@
 <meta property="og:image" content="http://pqi7fpfop.bkt.clouddn.com/2019-04-30-090755.png">
 <meta property="og:image" content="http://pqi7fpfop.bkt.clouddn.com/2019-04-30-092920.png">
 <meta property="og:image" content="http://pqi7fpfop.bkt.clouddn.com/2019-04-30-093909.png">
-<meta property="og:updated_time" content="2019-04-30T09:39:55.876Z">
+<meta property="og:updated_time" content="2019-04-30T09:44:25.517Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kylin的任务调度介绍">
 <meta name="twitter:description" content="Kylin的任务调度介绍Kylin的任务调度模式采用的是生产者-消费者模式。  Kylin的构建、合并、优化segment任务的入口为EngineFactory的createBatchCubingJob, createBatchMergeJob, createBatchOptimizeJob方法。EngineFactory是一个工厂类，可以根据不同的配置选择不同的cube构建类型（Batch或者S">
@@ -398,7 +398,7 @@
 <p>抽象类<code>AbstractExecutable</code>实现了<code>Executable</code>接口，核心是实现了<code>execute</code>方法，为了清晰的定义每个Job的运行状态，AbstractExecutable将<code>execute</code>方法细化为<code>onExecuteStart</code>，<code>doWork</code>，<code>onExecuteError</code>，<code>onExecuteFinished</code>等阶段。其中execute方法修饰符为final，onExecuteStart，onExecuteError，onExecuteFinished方法修饰符为protected，doWork方法修饰符为protected abstract，用于子类根据自己的具体逻辑重写此方法。</p>
 <p><code>execute</code>方法的关键代码如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> ExecuteResult <span class="title">execute</span><span class="params">(ExecutableContext executableContext)</span> <span class="keyword">throws</span> ExecuteException </span>&#123;</span><br><span class="line">        <span class="comment">//Job的状态从Ready 变为 Running</span></span><br><span class="line">        onExecuteStart(executableContext);</span><br><span class="line">        ...</span><br><span class="line">        <span class="comment">//不同的Job在这里实现具体逻辑</span></span><br><span class="line">        result = doWork(executableContext);</span><br><span class="line">        ...</span><br><span class="line">        <span class="keyword">if</span> (exception != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">//Job的状态从Ready 变为 Error</span></span><br><span class="line">            onExecuteError(exception, executableContext);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//Job的状态从Ready 变为 Succeed or Error or Discard</span></span><br><span class="line">        onExecuteFinished(result, executableContext);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>AbstractExecutable的具体直接实现类<code>主要</code>有ShellExecutable，HadoopShellExecutable，MapReduceExecutable，主要是根据自身的具体逻辑重写了<code>doWork</code>方法。</p>
+<p>AbstractExecutable的具体直接实现类主要<code>有ShellExecutable，HadoopShellExecutable，MapReduceExecutable，主要是根据自身的具体逻辑重写了</code>doWork`方法。</p>
 <ul>
 <li><code>ShellExecutable</code>主要用来执行Shell 命令可以直接执行的Job，像计算Hive表行数等Job。</li>
 <li><code>HadoopShellExecutable</code>主要用来执行依赖Hadoop环境且用Shell执行的Job，像建字典，建立HBase表，Bulkload HFile等Job。</li>
@@ -411,6 +411,7 @@
 <p><code>DefaultChainedExecutable</code> 也重写了<code>onExecuteFinished</code>方法，来根据所有子Job的状态更新整个Job的最终状态。</p>
 <p>Kylin默认通过<code>DefaultScheduler</code>进行任务的调度，其核心逻辑是十分简单的，有两个线程池，一个线程池用来抓取所有Job的状态信息，一个线程池来执行具体的Job。基本的逻辑过程如下：</p>
 <p><img src="http://pqi7fpfop.bkt.clouddn.com/2019-04-30-093909.png" alt="image-20190430173905136"></p>
+<p>参考：<a href="https://blog.bcmeng.com/post/kylin-job.html" target="_blank" rel="noopener">https://blog.bcmeng.com/post/kylin-job.html</a></p>
 
       
     </div>
