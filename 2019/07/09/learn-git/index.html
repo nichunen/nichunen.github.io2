@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="kylin,">
+  <meta name="keywords" content="git,">
 
 
 
@@ -79,21 +79,26 @@
 
 
 
-<meta name="description" content="Kyin任务元数据基本介绍在Kylin的元数据基础一文中介绍了kylin元数据的一些源码级基础知识。使用 Kylin生成每执行一个构建或合并任务，都会在Monitor页面生成一个job  Kylin使用存于resource store的metadata来实现元数据的持久化保存。 对于任务元数，Kylin使用了2中类型的元数据，分别为execute和execute_output  execute：存">
-<meta name="keywords" content="kylin">
+<meta name="description" content="本文以Apache Kylin为例，介绍使用git进行项目分支管理，以及常见开发中的问题及解决方法。 常见的分支类型 上图为截取的最近Apache Kylin项目的分支图，目前主要有以下几种分支类型：     master分支 维护分支 feature分支 release分支     作用 最新的代码，随时会被更新 维护版本的代码，理论上只接受改动较小的enhancement和bug fix 为开">
+<meta name="keywords" content="git">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kylin的元数据-任务">
-<meta property="og:url" content="http://yoursite.com/2019/03/30/Kylin-s-metadata-execute/index.html">
+<meta property="og:title" content="使用git进行项目版本管理">
+<meta property="og:url" content="http://yoursite.com/2019/07/09/learn-git/index.html">
 <meta property="og:site_name" content="飞龙在天的博客">
-<meta property="og:description" content="Kyin任务元数据基本介绍在Kylin的元数据基础一文中介绍了kylin元数据的一些源码级基础知识。使用 Kylin生成每执行一个构建或合并任务，都会在Monitor页面生成一个job  Kylin使用存于resource store的metadata来实现元数据的持久化保存。 对于任务元数，Kylin使用了2中类型的元数据，分别为execute和execute_output  execute：存">
+<meta property="og:description" content="本文以Apache Kylin为例，介绍使用git进行项目分支管理，以及常见开发中的问题及解决方法。 常见的分支类型 上图为截取的最近Apache Kylin项目的分支图，目前主要有以下几种分支类型：     master分支 维护分支 feature分支 release分支     作用 最新的代码，随时会被更新 维护版本的代码，理论上只接受改动较小的enhancement和bug fix 为开">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-07-09-093644.jpg">
-<meta property="og:image" content="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-07-09-093651.jpg">
-<meta property="og:updated_time" content="2019-07-09T09:37:33.814Z">
+<meta property="og:image" content="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-07-10-083425.png">
+<meta property="og:image" content="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-07-10-083616.jpg">
+<meta property="og:image" content="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-07-10-083701.jpg">
+<meta property="og:image" content="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-07-10-083731.jpg">
+<meta property="og:image" content="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-07-10-083244.png">
+<meta property="og:image" content="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-07-10-083223.png">
+<meta property="og:image" content="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-07-10-084113.jpg">
+<meta property="og:updated_time" content="2019-07-10T08:52:03.084Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Kylin的元数据-任务">
-<meta name="twitter:description" content="Kyin任务元数据基本介绍在Kylin的元数据基础一文中介绍了kylin元数据的一些源码级基础知识。使用 Kylin生成每执行一个构建或合并任务，都会在Monitor页面生成一个job  Kylin使用存于resource store的metadata来实现元数据的持久化保存。 对于任务元数，Kylin使用了2中类型的元数据，分别为execute和execute_output  execute：存">
-<meta name="twitter:image" content="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-07-09-093644.jpg">
+<meta name="twitter:title" content="使用git进行项目版本管理">
+<meta name="twitter:description" content="本文以Apache Kylin为例，介绍使用git进行项目分支管理，以及常见开发中的问题及解决方法。 常见的分支类型 上图为截取的最近Apache Kylin项目的分支图，目前主要有以下几种分支类型：     master分支 维护分支 feature分支 release分支     作用 最新的代码，随时会被更新 维护版本的代码，理论上只接受改动较小的enhancement和bug fix 为开">
+<meta name="twitter:image" content="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-07-10-083425.png">
 
 
 
@@ -123,13 +128,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/03/30/Kylin-s-metadata-execute/">
+  <link rel="canonical" href="http://yoursite.com/2019/07/09/learn-git/">
 
 
 
 
 
-  <title>Kylin的元数据-任务 | 飞龙在天的博客</title>
+  <title>使用git进行项目版本管理 | 飞龙在天的博客</title>
   
 
 
@@ -298,7 +303,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/30/Kylin-s-metadata-execute/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/09/learn-git/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chunen Ni">
@@ -315,7 +320,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kylin的元数据-任务</h1>
+          <h1 class="post-title" itemprop="name headline">使用git进行项目版本管理</h1>
         
 
         <div class="post-meta">
@@ -327,8 +332,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-30T15:21:20+08:00">
-                2019-03-30
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-09T17:29:45+08:00">
+                2019-07-09
               </time>
             
 
@@ -350,8 +355,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/大数据/" itemprop="url" rel="index">
-                    <span itemprop="name">大数据</span>
+                  <a href="/categories/git/" itemprop="url" rel="index">
+                    <span itemprop="name">git</span>
                   </a>
                 </span>
 
@@ -387,26 +392,101 @@
       
 
       
-        <h3 id="Kyin任务元数据基本介绍"><a href="#Kyin任务元数据基本介绍" class="headerlink" title="Kyin任务元数据基本介绍"></a>Kyin任务元数据基本介绍</h3><p>在<a href="https://nichunen.github.io/2019/03/30/Kylin-s-metadata-base/" title="Kylin的元数据基础" target="_blank" rel="noopener">Kylin的元数据基础</a>一文中介绍了kylin元数据的一些源码级基础知识。使用 Kylin生成每执行一个构建或合并任务，都会在Monitor页面生成一个job</p>
-<p><img src="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-07-09-093644.jpg" alt></p>
-<p>Kylin使用存于resource store的metadata来实现元数据的持久化保存。</p>
-<p>对于任务元数，Kylin使用了2中类型的元数据，分别为execute和execute_output</p>
-<ul>
-<li>execute：存储与表示任务的执行计划</li>
-<li>execute_output：存储与表示任务的执行结果</li>
+        <p>本文以Apache Kylin为例，介绍使用git进行项目分支管理，以及常见开发中的问题及解决方法。</p>
+<h4 id="常见的分支类型"><a href="#常见的分支类型" class="headerlink" title="常见的分支类型"></a>常见的分支类型</h4><p><img src="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-07-10-083425.png" alt="2019-07-09-103846"></p>
+<p>上图为截取的最近Apache Kylin项目的分支图，目前主要有以下几种分支类型：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">master分支</th>
+<th style="text-align:center">维护分支</th>
+<th style="text-align:center">feature分支</th>
+<th style="text-align:center">release分支</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">作用</td>
+<td style="text-align:center">最新的代码，随时会被更新</td>
+<td style="text-align:center">维护版本的代码，理论上只接受改动较小的enhancement和bug fix</td>
+<td style="text-align:center">为开发一些大改动的功能单拉的分支</td>
+<td style="text-align:center">用作版本发布的分支</td>
+</tr>
+<tr>
+<td style="text-align:center">例子</td>
+<td style="text-align:center">master</td>
+<td style="text-align:center">2.6.x</td>
+<td style="text-align:center">engine-flink, kylin-on-druid</td>
+<td style="text-align:center">v2.6.3-release, v-3.0.0-alpha-release</td>
+</tr>
+<tr>
+<td style="text-align:center">生命周期</td>
+<td style="text-align:center">从项目诞生到删除</td>
+<td style="text-align:center">从一个稳定的维护系列版本产生到该系列版本停止维护</td>
+<td style="text-align:center">从feature诞生到合并进入主分支</td>
+<td style="text-align:center">从准备发布到发布正式annunce</td>
+</tr>
+</tbody>
+</table>
+<p>每一个版本release后，都会打上对应的tag，目前有kylin-2.6.3, kylin-3.0.0-alpha等</p>
+<h4 id="常用的git命令"><a href="#常用的git命令" class="headerlink" title="常用的git命令"></a>常用的git命令</h4><h5 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h5><ul>
+<li><p>查看</p>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">git status #显示有变更的文件</span><br><span class="line"></span><br><span class="line">git log #显示当前分支的版本历史</span><br><span class="line"></span><br><span class="line">git log --stat #显示commit历史，以及每次commit发生变更的文件</span><br><span class="line"></span><br><span class="line">git blame [file] #显示指定文件是什么人在什么时间修改过</span><br><span class="line"></span><br><span class="line">git diff #显示暂存区和工作区的差异</span><br><span class="line"></span><br><span class="line">git diff HEAD #显示工作区与当前分支最新commit之间的差异</span><br><span class="line"></span><br><span class="line">git show [commit] #显示某次提交的元数据和内容变化</span><br><span class="line"></span><br><span class="line">git show [commit]:[filename] #显示某次提交时，某个文件的内容</span><br><span class="line"></span><br><span class="line">git reflog #显示当前分支的最近几次提交</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>增加/删除文件</p>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">git add [file1] #添加指定文件到暂存区</span><br><span class="line"></span><br><span class="line">git add [dir] #添加指定目录到暂存区，包括子目录</span><br><span class="line"></span><br><span class="line">git add . #添加当前目录的所有文件到暂存区</span><br><span class="line"></span><br><span class="line">git rm [file1] #删除工作区文件，并且将这次删除放入暂存区</span><br><span class="line"></span><br><span class="line">git rm --cached #[file] 停止追踪指定文件，但该文件会保留在工作区</span><br><span class="line"></span><br><span class="line">git mv &lt;file_original&gt; &lt;file_renamed&gt; #改名文件，并且将这个改名放入暂存区</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>代码提交</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">git commit -m [message] #提交暂存区到仓库区</span><br><span class="line"></span><br><span class="line">git commit [file1] -m [message] #提交暂存区的指定文件到仓库区</span><br><span class="line"></span><br><span class="line">git commit -a #提交工作区自上次commit之后的变化，直接到仓库区</span><br><span class="line"></span><br><span class="line">git commit -v #提交时显示所有diff信息</span><br><span class="line"></span><br><span class="line">git commit --amend -m [message] #使用一次新的commit，替代上一次提交. 如果代码没有任何新变化，则用来改写上一次commit的提交信息</span><br><span class="line"></span><br><span class="line">git commit --amend [file1] #重做上一次commit，并包括指定文件的新变化</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>远程仓库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">git clone [远程仓库地址] #从远程仓库克隆</span><br><span class="line"></span><br><span class="line">git fetch &lt;远程主机名&gt; &lt;分支名&gt; #更新远程仓库的所有变动，如git fetch origin master</span><br><span class="line"><span class="meta">#</span><span class="bash"> 要更新所有分支，命令可以简写为 git fetch</span></span><br><span class="line"></span><br><span class="line">git remote -v #显示所有远程仓库</span><br><span class="line"></span><br><span class="line">git remote show [remote] #显示某个远程仓库的信息</span><br><span class="line"></span><br><span class="line">git remote add [shortname] [url] #增加一个新的远程仓库，并命名</span><br><span class="line"></span><br><span class="line">git pull [remote] [branch] # 取回远程仓库的变化，并与本地分支合并</span><br><span class="line"></span><br><span class="line">git push &lt;远程主机名&gt; &lt;本地分支名&gt;:&lt;远程分支名&gt; #将本地分支的更新，推送到远程主机</span><br><span class="line"><span class="meta">#</span><span class="bash"> 如果省略远程分支名，则表示将本地分支推送与之存在<span class="string">"追踪关系"</span>的远程分支 git push origin master </span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 如果当前分支与远程分支之间存在追踪关系, 则本地分支和远程分支都可以省略 git push origin</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 如果当前分支只有一个追踪分支，那么主机名都可以省略 git push</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 如果当前分支与多个主机存在追踪关系，则可以使用-u选项指定一个默认主机，这样后面就可以不加任何参数使用git push</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> ！！！！慎用，有被杀了祭天的风险 ！！！！</span></span><br><span class="line">git push --force origin # 如果远程主机的版本比本地版本更新，推送时Git会报错，要求先在本地做git pull合并差异，然后再推送到远程主机。这时，如果你一定要推送，可以使用--force选项</span><br><span class="line"><span class="meta">#</span><span class="bash"> ！！！！慎用，有被杀了祭天的风险 ！！！！</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>标签管理</p>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">git tag &lt;name&gt; #在当前分支打标签</span><br><span class="line"></span><br><span class="line">git tag #查看所有标签</span><br><span class="line"></span><br><span class="line">git show &lt;tagname&gt; #查看标签信息</span><br><span class="line"></span><br><span class="line">git tag -a &lt;tagname&gt; -m "" #可以指定标签信息</span><br><span class="line"></span><br><span class="line">git push origin &lt;tagname&gt; #推送一个本地标签</span><br><span class="line"></span><br><span class="line">git push origin --tags #推送全部未推送过的本地标签</span><br><span class="line"></span><br><span class="line">git tag -d &lt;tagname&gt; #删除一个本地标签</span><br><span class="line"></span><br><span class="line">git push origin:refs/tags/&lt;tagname&gt; #删除一个远程标签</span><br><span class="line"></span><br><span class="line">git checkout &lt;tagname&gt; #checkout到一个指定tag下对应的代码</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>分支管理</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b dev #创建并切换到dev分支</span><br><span class="line"></span><br><span class="line">git branch dev #创建分支</span><br><span class="line"></span><br><span class="line">git checkout dev #切换分支</span><br><span class="line"></span><br><span class="line">git branch #查看当前分支</span><br><span class="line"></span><br><span class="line">git merge dev #当前分支与dev分支合并</span><br><span class="line"></span><br><span class="line">git branch -d dev #删除dev分支</span><br><span class="line"></span><br><span class="line"> git push --set-upstream &lt;remote&gt; &lt;branch_name&gt; #将当前分支提交到远端</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>撤销</p>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">git checkout [file] #恢复暂存区的指定文件到工作区</span><br><span class="line"></span><br><span class="line">git checkout [commit] [file] #恢复某个commit的指定文件到暂存区和工作区</span><br><span class="line"></span><br><span class="line">git checkout . #恢复暂存区的所有文件到工作区</span><br><span class="line"></span><br><span class="line">git reset [file] #重置暂存区的指定文件，与上一次commit保持一致，但工作区不变</span><br><span class="line"></span><br><span class="line">git reset --hard #重置暂存区与工作区，与上一次commit保持一致 </span><br><span class="line"></span><br><span class="line">git reset [commit] #重置当前分支的指针为指定commit，同时重置暂存区，但工作区不变</span><br><span class="line"></span><br><span class="line">git reset --hard [commit] #重置当前分支的HEAD为指定commit，同时重置暂存区和工作区，与指定commit一致</span><br><span class="line">git reset --keep [commit] #重置当前HEAD为指定commit，但保持暂存区和工作区不变</span><br><span class="line"></span><br><span class="line">git revert [commit] #新建一个commit，用来撤销指定commit  后者的所有变化都将被前者抵消，并且应用到当前分支</span><br><span class="line"></span><br><span class="line">git stash #暂时将未提交的变化移除</span><br><span class="line"></span><br><span class="line">git stash pop #将在缓冲区的变动移入</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
-<p>每个任务仅有一个execute元数据，会有(step_num + 1)个execute_output元数据，如下图所示为一dump下来的某个任务的元数据</p>
-<p><img src="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-07-09-093651.jpg" alt></p>
-<p>execute的基本元数据类为<code>org.apache.kylin.job.dao.ExecutablePO</code>，代码为</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ExecutablePO</span> <span class="keyword">extends</span> <span class="title">RootPersistentEntity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 任务名</span></span><br><span class="line">    <span class="meta">@JsonProperty</span>(<span class="string">"name"</span>)</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">  	<span class="comment">// 子任务列表</span></span><br><span class="line">    <span class="meta">@JsonProperty</span>(<span class="string">"tasks"</span>)</span><br><span class="line">    <span class="keyword">private</span> List&lt;ExecutablePO&gt; tasks;</span><br><span class="line"></span><br><span class="line">  	<span class="comment">// 任务类型</span></span><br><span class="line">    <span class="meta">@JsonProperty</span>(<span class="string">"type"</span>)</span><br><span class="line">    <span class="keyword">private</span> String type;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 任务参数</span></span><br><span class="line">    <span class="meta">@JsonProperty</span>(<span class="string">"params"</span>)</span><br><span class="line">    <span class="keyword">private</span> Map&lt;String, String&gt; params = Maps.newHashMap();</span><br><span class="line">  </span><br><span class="line">    <span class="comment">//....</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>生成的json元数据文件示例如下：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"uuid"</span>: <span class="string">"99b80122-b59b-bbdb-5f22-26d1d9270220"</span>, </span><br><span class="line">    <span class="attr">"last_modified"</span>: <span class="number">1555246404591</span>, </span><br><span class="line">    <span class="attr">"version"</span>: <span class="string">"2.6.0.20500"</span>, </span><br><span class="line">    <span class="attr">"name"</span>: <span class="string">"BUILD CUBE - kylin_sales_cube - 20120101000000_20190430185000 - GMT+08:00 2019-04-14 20:53:24"</span>, </span><br><span class="line">    <span class="attr">"tasks"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"uuid"</span>: <span class="string">"99b80122-b59b-bbdb-5f22-26d1d9270220-00"</span>, </span><br><span class="line">            <span class="attr">"last_modified"</span>: <span class="number">0</span>, </span><br><span class="line">            <span class="attr">"version"</span>: <span class="string">"2.6.0.20500"</span>, </span><br><span class="line">            <span class="attr">"name"</span>: <span class="string">"Create Intermediate Flat Hive Table"</span>, </span><br><span class="line">            <span class="attr">"tasks"</span>: <span class="literal">null</span>, </span><br><span class="line">            <span class="attr">"type"</span>: <span class="string">"org.apache.kylin.source.hive.CreateFlatHiveTableStep"</span>, </span><br><span class="line">            <span class="attr">"params"</span>: &#123;</span><br><span class="line">                <span class="attr">"HiveInit"</span>: <span class="string">"USE default; "</span>, </span><br><span class="line">                <span class="attr">"HiveRedistributeData"</span>: <span class="string">"DROP TABLE IF EXISTS kylin_intermediate_kylin_sales_cube_86f98364_1485_001b_8fc5_18ec50930a14; CREATE EXTERNAL TABLE IF NOT EXISTS kylin_intermediate_kylin_sales_cube_86f98364_1485_001b_8fc5_18ec50930a14 ( KYLIN_SALES_TRANS_ID bigint ,KYLIN_SALES_PART_DT date ,KYLIN_SALES_LEAF_CATEG_ID bigint ,KYLIN_SALES_LSTG_SITE_ID int ,KYLIN_CATEGORY_GROUPINGS_META_CATEG_NAME string ,KYLIN_CATEGORY_GROUPINGS_CATEG_LVL2_NAME string ,KYLIN_CATEGORY_GROUPINGS_CATEG_LVL3_NAME string ,KYLIN_SALES_LSTG_FORMAT_NAME string ,KYLIN_SALES_SELLER_ID bigint ,KYLIN_SALES_BUYER_ID bigint ,BUYER_ACCOUNT_ACCOUNT_BUYER_LEVEL int ,SELLER_ACCOUNT_ACCOUNT_SELLER_LEVEL int ,BUYER_ACCOUNT_ACCOUNT_COUNTRY string ,SELLER_ACCOUNT_ACCOUNT_COUNTRY string ,BUYER_COUNTRY_NAME string ,SELLER_COUNTRY_NAME string ,KYLIN_SALES_OPS_USER_ID string ,KYLIN_SALES_OPS_REGION string ,KYLIN_SALES_PRICE decimal(19,4) ) STORED AS SEQUENCEFILE LOCATION 'hdfs://sandbox.hortonworks.com:8020/Users/nichunen/Downloads/template/kylin-99b80122-b59b-bbdb-5f22-26d1d9270220/kylin_intermediate_kylin_sales_cube_86f98364_1485_001b_8fc5_18ec50930a14'; ALTER TABLE kylin_intermediate_kylin_sales_cube_86f98364_1485_001b_8fc5_18ec50930a14 SET TBLPROPERTIES('auto.purge'='true'); INSERT OVERWRITE TABLE `kylin_intermediate_kylin_sales_cube_86f98364_1485_001b_8fc5_18ec50930a14` SELECT `KYLIN_SALES`.`TRANS_ID` as `KYLIN_SALES_TRANS_ID` ,`KYLIN_SALES`.`PART_DT` as `KYLIN_SALES_PART_DT` ,`KYLIN_SALES`.`LEAF_CATEG_ID` as `KYLIN_SALES_LEAF_CATEG_ID` ,`KYLIN_SALES`.`LSTG_SITE_ID` as `KYLIN_SALES_LSTG_SITE_ID` ,`KYLIN_CATEGORY_GROUPINGS`.`META_CATEG_NAME` as `KYLIN_CATEGORY_GROUPINGS_META_CATEG_NAME` ,`KYLIN_CATEGORY_GROUPINGS`.`CATEG_LVL2_NAME` as `KYLIN_CATEGORY_GROUPINGS_CATEG_LVL2_NAME` ,`KYLIN_CATEGORY_GROUPINGS`.`CATEG_LVL3_NAME` as `KYLIN_CATEGORY_GROUPINGS_CATEG_LVL3_NAME` ,`KYLIN_SALES`.`LSTG_FORMAT_NAME` as `KYLIN_SALES_LSTG_FORMAT_NAME` ,`KYLIN_SALES`.`SELLER_ID` as `KYLIN_SALES_SELLER_ID` ,`KYLIN_SALES`.`BUYER_ID` as `KYLIN_SALES_BUYER_ID` ,`BUYER_ACCOUNT`.`ACCOUNT_BUYER_LEVEL` as `BUYER_ACCOUNT_ACCOUNT_BUYER_LEVEL` ,`SELLER_ACCOUNT`.`ACCOUNT_SELLER_LEVEL` as `SELLER_ACCOUNT_ACCOUNT_SELLER_LEVEL` ,`BUYER_ACCOUNT`.`ACCOUNT_COUNTRY` as `BUYER_ACCOUNT_ACCOUNT_COUNTRY` ,`SELLER_ACCOUNT`.`ACCOUNT_COUNTRY` as `SELLER_ACCOUNT_ACCOUNT_COUNTRY` ,`BUYER_COUNTRY`.`NAME` as `BUYER_COUNTRY_NAME` ,`SELLER_COUNTRY`.`NAME` as `SELLER_COUNTRY_NAME` ,`KYLIN_SALES`.`OPS_USER_ID` as `KYLIN_SALES_OPS_USER_ID` ,`KYLIN_SALES`.`OPS_REGION` as `KYLIN_SALES_OPS_REGION` ,`KYLIN_SALES`.`PRICE` as `KYLIN_SALES_PRICE` FROM `DEFAULT`.`KYLIN_SALES` as `KYLIN_SALES` INNER JOIN `DEFAULT`.`KYLIN_CAL_DT` as `KYLIN_CAL_DT` ON `KYLIN_SALES`.`PART_DT` = `KYLIN_CAL_DT`.`CAL_DT` INNER JOIN `DEFAULT`.`KYLIN_CATEGORY_GROUPINGS` as `KYLIN_CATEGORY_GROUPINGS` ON `KYLIN_SALES`.`LEAF_CATEG_ID` = `KYLIN_CATEGORY_GROUPINGS`.`LEAF_CATEG_ID` AND `KYLIN_SALES`.`LSTG_SITE_ID` = `KYLIN_CATEGORY_GROUPINGS`.`SITE_ID` INNER JOIN `DEFAULT`.`KYLIN_ACCOUNT` as `BUYER_ACCOUNT` ON `KYLIN_SALES`.`BUYER_ID` = `BUYER_ACCOUNT`.`ACCOUNT_ID` INNER JOIN `DEFAULT`.`KYLIN_ACCOUNT` as `SELLER_ACCOUNT` ON `KYLIN_SALES`.`SELLER_ID` = `SELLER_ACCOUNT`.`ACCOUNT_ID` INNER JOIN `DEFAULT`.`KYLIN_COUNTRY` as `BUYER_COUNTRY` ON `BUYER_ACCOUNT`.`ACCOUNT_COUNTRY` = `BUYER_COUNTRY`.`COUNTRY` INNER JOIN `DEFAULT`.`KYLIN_COUNTRY` as `SELLER_COUNTRY` ON `SELLER_ACCOUNT`.`ACCOUNT_COUNTRY` = `SELLER_COUNTRY`.`COUNTRY` WHERE 1=1 AND (`KYLIN_SALES`.`PART_DT` &gt;= '2012-01-01' AND `KYLIN_SALES`.`PART_DT` &lt; '2019-04-30') ; "</span>, </span><br><span class="line">                <span class="attr">"cubeName"</span>: <span class="string">"kylin_sales_cube"</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, </span><br><span class="line">        &#123;&#125;, </span><br><span class="line">        &#123;&#125;, </span><br><span class="line">        &#123;&#125;, </span><br><span class="line">        &#123;&#125;, </span><br><span class="line">        &#123;&#125;, </span><br><span class="line">        &#123;&#125;, </span><br><span class="line">        &#123;&#125;, </span><br><span class="line">        &#123;&#125;, </span><br><span class="line">        &#123;&#125;, </span><br><span class="line">        &#123;&#125;, </span><br><span class="line">        &#123;&#125;, </span><br><span class="line">        &#123;&#125;, </span><br><span class="line">        &#123;&#125;, </span><br><span class="line">        &#123;&#125;, </span><br><span class="line">        &#123;&#125;, </span><br><span class="line">        &#123;&#125;, </span><br><span class="line">        &#123;&#125;, </span><br><span class="line">        &#123;&#125;, </span><br><span class="line">        &#123;&#125;, </span><br><span class="line">        &#123;&#125;, </span><br><span class="line">        &#123;&#125;</span><br><span class="line">    ], </span><br><span class="line">    <span class="attr">"type"</span>: <span class="string">"org.apache.kylin.engine.mr.CubingJob"</span>, </span><br><span class="line">    <span class="attr">"params"</span>: &#123;</span><br><span class="line">        <span class="attr">"submitter"</span>: <span class="string">"ADMIN"</span>, </span><br><span class="line">        <span class="attr">"envName"</span>: <span class="string">"DEV"</span>, </span><br><span class="line">        <span class="attr">"segmentId"</span>: <span class="string">"86f98364-1485-001b-8fc5-18ec50930a14"</span>, </span><br><span class="line">        <span class="attr">"notify_list"</span>: <span class="string">""</span>, </span><br><span class="line">        <span class="attr">"projectName"</span>: <span class="string">"learn_kylin"</span>, </span><br><span class="line">        <span class="attr">"jobType"</span>: <span class="string">"BUILD"</span>, </span><br><span class="line">        <span class="attr">"cubeName"</span>: <span class="string">"kylin_sales_cube"</span>, </span><br><span class="line">        <span class="attr">"segmentName"</span>: <span class="string">"20120101000000_20190430185000"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>execute_output的基本元数据类为<code>org.apache.kylin.job.dao.ExecutableOutputPO</code>，代码为</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ExecutableOutputPO</span> <span class="keyword">extends</span> <span class="title">RootPersistentEntity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@JsonProperty</span>(<span class="string">"content"</span>)</span><br><span class="line">    <span class="keyword">private</span> String content;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@JsonProperty</span>(<span class="string">"status"</span>)</span><br><span class="line">    <span class="keyword">private</span> String status = <span class="string">"READY"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@JsonProperty</span>(<span class="string">"info"</span>)</span><br><span class="line">    <span class="keyword">private</span> Map&lt;String, String&gt; info = Maps.newHashMap();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>生成的全局任务json元数据文件示例如下：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"uuid"</span>: <span class="string">"99b80122-b59b-bbdb-5f22-26d1d9270220"</span>, </span><br><span class="line">    <span class="attr">"last_modified"</span>: <span class="number">1555246411812</span>, </span><br><span class="line">    <span class="attr">"version"</span>: <span class="string">"2.6.0.20500"</span>, </span><br><span class="line">    <span class="attr">"content"</span>: <span class="string">"org.apache.kylin.job.exception.ExecuteException: java.io.IOException: OS command error exit with return code: 127, error message: /bin/bash: hive: command not found</span></span><br><span class="line"><span class="string">The command is: </span></span><br><span class="line"><span class="string">hive -e \""</span>, </span><br><span class="line">    <span class="attr">"status"</span>: <span class="string">"ERROR"</span>, </span><br><span class="line">    <span class="attr">"info"</span>: &#123;</span><br><span class="line">        <span class="attr">"startTime"</span>: <span class="string">"1555246411762"</span>, </span><br><span class="line">        <span class="attr">"buildInstance"</span>: <span class="string">"62641@GggdeMacBook-Pro.local"</span>, </span><br><span class="line">        <span class="attr">"endTime"</span>: <span class="string">"1555246411811"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>生成的子任务json元数据文件示例如下：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"uuid"</span>: <span class="string">"99b80122-b59b-bbdb-5f22-26d1d9270220-00"</span>, </span><br><span class="line">    <span class="attr">"last_modified"</span>: <span class="number">1555246411809</span>, </span><br><span class="line">    <span class="attr">"version"</span>: <span class="string">"2.6.0.20500"</span>, </span><br><span class="line">    <span class="attr">"content"</span>: <span class="string">"java.io.IOException: OS command error exit with return code: 127, error message: /bin/bash: hive: command not found</span></span><br><span class="line"><span class="string">The command is: </span></span><br><span class="line"><span class="string">hive -e \""</span>, </span><br><span class="line">    <span class="attr">"status"</span>: <span class="string">"ERROR"</span>, </span><br><span class="line">    <span class="attr">"info"</span>: &#123;</span><br><span class="line">        <span class="attr">"startTime"</span>: <span class="string">"1555246411769"</span>, </span><br><span class="line">        <span class="attr">"endTime"</span>: <span class="string">"1555246411807"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="理解HEAD"><a href="#理解HEAD" class="headerlink" title="理解HEAD"></a>理解HEAD</h5><p>Git 中的 HEAD 可以理解为指针，指向当前仓库所处的分支。一般在有 git 管理的目录下打开 git 终端都能在当前路径的尾巴上，看到所处的分支名。</p>
+<p><img src="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-07-10-083616.jpg" alt="2019-07-10-060207"></p>
+<p>当使用 <code>git checkout &lt; branch_name&gt;</code> 切换分支时，HEAD 会移动到指定分支。</p>
+<p><img src="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-07-10-083701.jpg" alt="2019-07-10-060918"></p>
+<p>但是如果使用的是 <code>git checkout &lt;commit id&gt;</code>，即切换到指定的某一次提交，HEAD 就会处于 detached 状态（游离状态）。在这个基础上的提交会新开一个匿名分支。</p>
+<h4 id="常见案例"><a href="#常见案例" class="headerlink" title="常见案例"></a>常见案例</h4><h5 id="如何提交一个Kylin的Pull-Request"><a href="#如何提交一个Kylin的Pull-Request" class="headerlink" title="如何提交一个Kylin的Pull Request"></a>如何提交一个Kylin的Pull Request</h5><ul>
+<li><p>Fork Apache Kylin项目，则会生成个人的Kylin项目，如<a href="https://github.com/nichunen/kylin.git" target="_blank" rel="noopener">https://github.com/nichunen/kylin.git</a></p>
+</li>
+<li><p>Clone个人fork的项目到本地 </p>
+<p>  <code>git clone https://github.com/nichunen/kylin.git</code></p>
+</li>
+<li><p>基于master分支或feature分支新建一个分支，一般为Jira issue号</p>
+<p>  <code>git checkout -b KYLIN-4042</code></p>
+</li>
+<li><p>基于上述分支进行开发</p>
+</li>
+<li><p>将改动commit到本地，并push到远程</p>
+</li>
+<li><p>在github打开apache/kylin项目，页面会自动提示创建PR</p>
+<p>  <img src="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-07-10-083731.jpg" alt="1562740942736"></p>
+</li>
+</ul>
+<h5 id="正确地进行rebase"><a href="#正确地进行rebase" class="headerlink" title="正确地进行rebase"></a>正确地进行rebase</h5><p>Rebase 实际上就是取出一系列的提交记录，“复制”它们，然后在另外一个地方逐个的放下去。Rebase 的优势就是可以创造更线性的提交历史。如果只允许使用 Rebase 的话，代码库的提交历史将会变得异常清晰。</p>
+<p>如下图的项目，现在我们需要新建并切换到 bugFix 分支，进行提交一次，然后切换回 master 分支再提交一次。再次切换到 bugFix 分支，rebase  master 上的改动。</p>
+<p><img src="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-07-10-083244.png" alt="image-20190710145247466"></p>
+<p>命令大致如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b BugFix</span><br><span class="line">git commit</span><br><span class="line">git checkout master</span><br><span class="line">git commit</span><br><span class="line">git checkout BugFix</span><br><span class="line">git rebase master</span><br></pre></td></tr></table></figure>
+<h5 id="如何快速向上移动一个-多个commit"><a href="#如何快速向上移动一个-多个commit" class="headerlink" title="如何快速向上移动一个/多个commit"></a>如何快速向上移动一个/多个commit</h5><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout master^</span><br><span class="line">git checkout master~&#123;number&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="如何进行cherry-pick"><a href="#如何进行cherry-pick" class="headerlink" title="如何进行cherry-pick"></a>如何进行cherry-pick</h5><p>如下图的分支结构，现在需要将三个分支中的C3,C4,C7提交记录复制到 master 上</p>
+<p><img src="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-07-10-083223.png" alt="image-20190710163223053"></p>
+<p><code>git cherry-pick C3 C4 C7</code></p>
+<p><img src="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-07-10-084113.jpg" alt="1562748062533"></p>
+<h5 id="使用Rebase-i对commit进行合并与调整"><a href="#使用Rebase-i对commit进行合并与调整" class="headerlink" title="使用Rebase -i对commit进行合并与调整"></a>使用Rebase -i对commit进行合并与调整</h5><p>待完成</p>
+<p>生成和合并patch</p>
 
       
     </div>
@@ -465,7 +545,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/kylin/" rel="tag"># kylin</a>
+            <a href="/tags/git/" rel="tag"># git</a>
           
         </div>
       
@@ -478,8 +558,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/03/30/Kylin-s-metadata-base/" rel="next" title="Kylin的元数据基础">
-                <i class="fa fa-chevron-left"></i> Kylin的元数据基础
+              <a href="/2019/03/30/Kylin-s-job-scheduler/" rel="next" title="Kylin的任务调度介绍">
+                <i class="fa fa-chevron-left"></i> Kylin的任务调度介绍
               </a>
             
           </div>
@@ -487,10 +567,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/03/30/Kylin-s-job-scheduler/" rel="prev" title="Kylin的任务调度介绍">
-                Kylin的任务调度介绍 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -671,7 +747,7 @@ var jiathis_config={
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Kyin任务元数据基本介绍"><span class="nav-number">1.</span> <span class="nav-text">Kyin任务元数据基本介绍</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#常见的分支类型"><span class="nav-number">1.</span> <span class="nav-text">常见的分支类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常用的git命令"><span class="nav-number">2.</span> <span class="nav-text">常用的git命令</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#基本操作"><span class="nav-number">2.1.</span> <span class="nav-text">基本操作</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#理解HEAD"><span class="nav-number">2.2.</span> <span class="nav-text">理解HEAD</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常见案例"><span class="nav-number">3.</span> <span class="nav-text">常见案例</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#如何提交一个Kylin的Pull-Request"><span class="nav-number">3.1.</span> <span class="nav-text">如何提交一个Kylin的Pull Request</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#正确地进行rebase"><span class="nav-number">3.2.</span> <span class="nav-text">正确地进行rebase</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#如何快速向上移动一个-多个commit"><span class="nav-number">3.3.</span> <span class="nav-text">如何快速向上移动一个/多个commit</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#如何进行cherry-pick"><span class="nav-number">3.4.</span> <span class="nav-text">如何进行cherry-pick</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#使用Rebase-i对commit进行合并与调整"><span class="nav-number">3.5.</span> <span class="nav-text">使用Rebase -i对commit进行合并与调整</span></a></li></ol></li></ol></div>
             
 
           </div>
