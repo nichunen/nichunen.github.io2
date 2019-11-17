@@ -90,7 +90,7 @@
 <meta property="og:image" content="http://pqi7fpfop.bkt.clouddn.com/2019-04-30-090755.png">
 <meta property="og:image" content="http://pqi7fpfop.bkt.clouddn.com/2019-04-30-092920.png">
 <meta property="og:image" content="http://pqi7fpfop.bkt.clouddn.com/2019-04-30-093909.png">
-<meta property="og:updated_time" content="2019-04-30T09:44:25.517Z">
+<meta property="og:updated_time" content="2019-09-09T11:16:37.040Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kylin的任务调度介绍">
 <meta name="twitter:description" content="Kylin的任务调度介绍Kylin的任务调度模式采用的是生产者-消费者模式。  Kylin的构建、合并、优化segment任务的入口为EngineFactory的createBatchCubingJob, createBatchMergeJob, createBatchOptimizeJob方法。EngineFactory是一个工厂类，可以根据不同的配置选择不同的cube构建类型（Batch或者S">
@@ -412,6 +412,76 @@
 <p>Kylin默认通过<code>DefaultScheduler</code>进行任务的调度，其核心逻辑是十分简单的，有两个线程池，一个线程池用来抓取所有Job的状态信息，一个线程池来执行具体的Job。基本的逻辑过程如下：</p>
 <p><img src="http://pqi7fpfop.bkt.clouddn.com/2019-04-30-093909.png" alt="image-20190430173905136"></p>
 <p>参考：<a href="https://blog.bcmeng.com/post/kylin-job.html" target="_blank" rel="noopener">https://blog.bcmeng.com/post/kylin-job.html</a></p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>KYLIN issue</th>
+<th>Description</th>
+<th>KAP issue</th>
+<th>Status</th>
+<th>Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bug</td>
+<td><a href="https://issues.apache.org/jira/browse/KYLIN-4107" target="_blank" rel="noopener">4107</a></td>
+<td>Fix bug of StorageCleanupJob fails to delete Hive tables with “Argument list too long” error</td>
+<td>P2</td>
+<td></td>
+<td>表名过长清理时报错，建议引入</td>
+</tr>
+<tr>
+<td>Enhancement</td>
+<td><a href="https://issues.apache.org/jira/browse/KYLIN-4117" target="_blank" rel="noopener">4117</a></td>
+<td>Auto adjust data type of RelNode for intersect_count</td>
+<td>P2</td>
+<td></td>
+<td>Rest客户端有可能抛出带有明文Klin密码的异常信息。需排查KE是否有此问题，若有，建议引入</td>
+</tr>
+<tr>
+<td>Enhancement</td>
+<td><a href="https://issues.apache.org/jira/browse/KYLIN-4137" target="_blank" rel="noopener">4137</a></td>
+<td>Accelerate metadata reloading</td>
+<td>P2</td>
+<td></td>
+<td>优化元数据重载，建议引入</td>
+</tr>
+<tr>
+<td>Enhancement</td>
+<td><a href="https://issues.apache.org/jira/browse/KYLIN-4101" target="_blank" rel="noopener">4101</a></td>
+<td>Set hive and spark job name when building cube</td>
+<td>P3</td>
+<td></td>
+<td>写起在yarn上的hive及spark任务的任务名，方便检查。无风险，建议引入</td>
+</tr>
+<tr>
+<td>Enhancement</td>
+<td><a href="https://issues.apache.org/jira/browse/KYLIN-4095" target="_blank" rel="noopener">4095</a></td>
+<td>Add RESOURCE_PATH_PREFIX option in ResourceTool</td>
+<td>P3</td>
+<td></td>
+<td>Resume人物后，任务输出没有清空，留的是上一次跑的输出结果，建议引入</td>
+</tr>
+<tr>
+<td>Enhancement</td>
+<td><a href="https://issues.apache.org/jira/browse/KYLIN-4092" target="_blank" rel="noopener">4092</a></td>
+<td>Support setting seperate jvm params for kylin backgroud tools</td>
+<td>P2</td>
+<td></td>
+<td>支持为使用kylin.sh跑的脚本工具配置jvm参数</td>
+</tr>
+<tr>
+<td>Enhancement</td>
+<td><a href="https://issues.apache.org/jira/browse/KYLIN-4091" target="_blank" rel="noopener">4091</a></td>
+<td>Support fast mode and simple mode for running CI</td>
+<td>P2</td>
+<td></td>
+<td>支持CI中cube的并发构建，来缩短CI时间，建议引入</td>
+</tr>
+</tbody>
+</table>
 
       
     </div>
@@ -603,7 +673,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -614,7 +684,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -625,7 +695,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
