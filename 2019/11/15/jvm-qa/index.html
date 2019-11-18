@@ -93,14 +93,14 @@
 <meta property="og:image" content="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-11-17-091847.png">
 <meta property="og:image" content="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-11-17-092054.png">
 <meta property="og:image" content="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-11-17-093539.png">
-<meta property="og:image" content="http://yoursite.com/Users/nichunen/Library/Application%20Support/typora-user-images/page4image18274192.png">
+<meta property="og:image" content="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-11-18-093056.png">
 <meta property="og:image" content="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-11-18-071817.png">
 <meta property="og:image" content="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-11-18-074702.jpg">
 <meta property="og:image" content="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-11-18-074738.jpg">
 <meta property="og:image" content="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-11-18-092720.png">
 <meta property="og:image" content="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-11-18-092817.png">
 <meta property="og:image" content="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-11-18-092857.jpg">
-<meta property="og:updated_time" content="2019-11-18T09:29:13.369Z">
+<meta property="og:updated_time" content="2019-11-18T09:31:00.470Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM常见问题QA">
 <meta name="twitter:description" content="什么是类的加载 ? 类的加载指的是将类的.class文件中的二进制数据读入到内存中，将其放在运行时数据区的方法区内，然后在堆区创建一个java.lang.Class对象，用来封装类在方法区内的数据结构。类的加载的最终产品是位于堆区中 的Class对象，Class对象封装了类在方法区内的数据结构，并且向Java程序员提供了访问方法区内的数据结构的接口。 类的生命周期 类的生命周期包括这几个部">
@@ -439,7 +439,7 @@
 <p>当一个类收到了类加载请求时，不会自己先去加载这个类，而是将其委派给父类，由父类去加载，如果此时父类不能加载，反馈给子类，由子类去完成类的加载。 自底向上的检查，自顶向下的加载</p>
 <p>注意双亲委派模式的问题:无法识别应用程序类加载器中的类<br>解决方案:设置一个上下文加载器角色解决</p>
 <p><strong>JVM内存结构</strong></p>
-<p><img src="/Users/nichunen/Library/Application Support/typora-user-images/page4image18274192.png" alt="page4image18274192.png"> </p>
+<p><img src="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-11-18-093056.png" alt="page4image18274192.png"> </p>
 <p>方法区和堆是所有线程共享的内存区域，而java栈、本地方法栈和程序计数器是运行是线程私有的内存区域。</p>
 <ul>
 <li><p>Java堆(Heap)，是Java虚拟机所管理的内存中最大的一块。Java堆是被所有线程共享的一块内存区域，在虚拟机启动时创建。此内存区域的唯一目的就是存放对象实例，几乎所有的对象实例都在这里分配内 存。</p>
