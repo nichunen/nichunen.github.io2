@@ -291,6 +291,870 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/03/singleton/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chunen Ni">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞龙在天的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/03/singleton/" itemprop="url">单例模式漫谈</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-03T18:09:28+08:00">
+                2019-12-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>单例模式，有“懒汉式”和“饿汉式”两种。</p>
+<ul>
+<li><p>懒汉式 - 单例类的实例在第一次被引用时候才被初始化。</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>饿汉式 - 单例类的实例在加载的时候就被初始化。</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">new</span> Singleton();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>在单线程程序中，上面两种形式基本可以满足要求了，但是在多线程环境下，单例类就有可能会失效，这个时候就要对其加锁了，来确保线程安全。对线程加锁用的synchronized关键字，这个关键字的用法主要也分为两种：</p>
+<p>一种是加在方法名之前，二是声明同步块。下面是对懒汉式单例类加上线程同步的实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种方式效率比较低，性能不是太好，不过也可以用，因为是对整个方法加上了线程同步，其实只要在new的时候考虑线程同步就行了，这种方法不推荐使用。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance;  </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object syncLock = <span class="keyword">new</span> Object();  </span><br><span class="line">     </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">         </span><br><span class="line">    &#125;  </span><br><span class="line">     </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;  </span><br><span class="line">            <span class="keyword">synchronized</span> (syncLock) &#123;  </span><br><span class="line">                <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;  </span><br><span class="line">                    instance = <span class="keyword">new</span> Singleton();  </span><br><span class="line">                &#125;  </span><br><span class="line">            &#125;  </span><br><span class="line">        &#125;  </span><br><span class="line">         </span><br><span class="line">        <span class="keyword">return</span> instance;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>synchronized同步块括号中的锁定对象是采用的一个无关的Object类实例，而不是采用this，因为getInstance是一个静态方法，在它内部不能使用未静态的或者未实例的类对象，因此也可以用下面的方法来实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (Singleton.class) &#123;</span><br><span class="line">                <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此处锁加在方法上的效率远低于同步代码块，因为同步方法锁只允许一个线程执行方法，其他线程阻塞，而代码块不同，允许并发访问方法，只是在代码块这里只允许一个线程执行，这种加锁方式肯定效率高。</p>
+<p>在早期的JVM中，synchronized存在巨大的性能开销。因此，有人想出了一个“聪明”的技巧：双重检查锁定（Double-Checked Locking）。人们想通过双重检查锁定来降低同步的开销。下面是使用双重检查锁定来实现延迟初始化的示例代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123; <span class="comment">// 1</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Instance instance; <span class="comment">// 2</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Instance <span class="title">getInstance</span><span class="params">()</span> </span>&#123; <span class="comment">// 3</span></span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123; <span class="comment">// 4:第一次检查</span></span><br><span class="line">            <span class="keyword">synchronized</span> (Singleton.class) &#123; <span class="comment">// 5:加锁</span></span><br><span class="line">                <span class="keyword">if</span> (instance == <span class="keyword">null</span>) <span class="comment">// 6:第二次检查</span></span><br><span class="line">                instance = <span class="keyword">new</span> Instance(); <span class="comment">// 7:问题的根源出在这里</span></span><br><span class="line">            &#125; <span class="comment">// 8</span></span><br><span class="line">        &#125; <span class="comment">// 9</span></span><br><span class="line">        <span class="keyword">return</span> instance; <span class="comment">// 10</span></span><br><span class="line">    &#125; <span class="comment">// 11</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述的Instance类变量是没有用volatile关键字修饰的，会导致这样一个问题：<br> <strong>在线程执行到第4行的时候，代码读取到instance不为null时，instance引用的对象有可能还没有完成初始化。</strong><br> 主要的原因是重排序。<strong>重排序是指编译器和处理器为了优化程序性能而对指令序列进行重新排序的一种手段。</strong><br> 第7行的代码创建了一个对象，这一行代码可以分解成3个操作：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">memory = allocate();　　<span class="comment">// 1：分配对象的内存空间</span></span><br><span class="line">ctorInstance(memory);　<span class="comment">// 2：初始化对象</span></span><br><span class="line">instance = memory;　　<span class="comment">// 3：设置instance指向刚分配的内存地址</span></span><br></pre></td></tr></table></figure>
+<p>根源在于代码中的2和3之间，可能会被重排序。例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">memory = allocate();　　<span class="comment">// 1：分配对象的内存空间</span></span><br><span class="line">instance = memory;　　<span class="comment">// 3：设置instance指向刚分配的内存地址</span></span><br><span class="line"><span class="comment">// 注意，此时对象还没有被初始化！</span></span><br><span class="line">ctorInstance(memory);　<span class="comment">// 2：初始化对象</span></span><br></pre></td></tr></table></figure>
+<p>这在单线程环境下是没有问题的，但在多线程环境下会出现问题：</p>
+<p><img src="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-12-03-115729.jpg" alt></p>
+<p>B线程会看到一个还没有被初始化的对象。</p>
+<p><img src="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-12-03-115814.jpg" alt></p>
+<p>A2和A3的重排序不影响线程A的最终结果，但会导致线程B在B1处判断出instance不为空，线程B接下来将访问instance引用的对象。此时，线程B将会访问到一个还未初始化的对象。<br> <strong>所以只需要做一点小的修改（把instance声明为volatile型），就可以实现线程安全的延迟初始化。</strong>因为被volatile关键字修饰的变量是被禁止重排序的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123; <span class="comment">// 1</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> Instance instance; <span class="comment">// 2</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Instance <span class="title">getInstance</span><span class="params">()</span> </span>&#123; <span class="comment">// 3</span></span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123; <span class="comment">// 4:第一次检查</span></span><br><span class="line">            <span class="keyword">synchronized</span> (Singleton.class) &#123; <span class="comment">// 5:加锁</span></span><br><span class="line">                <span class="keyword">if</span> (instance == <span class="keyword">null</span>) <span class="comment">// 6:第二次检查</span></span><br><span class="line">                instance = <span class="keyword">new</span> Instance(); <span class="comment">// 7:问题的根源出在这里</span></span><br><span class="line">            &#125; <span class="comment">// 8</span></span><br><span class="line">        &#125; <span class="comment">// 9</span></span><br><span class="line">        <span class="keyword">return</span> instance; <span class="comment">// 10</span></span><br><span class="line">    &#125; <span class="comment">// 11</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    <div>
+          
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/20/hbase-qa/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chunen Ni">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞龙在天的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/20/hbase-qa/" itemprop="url">Hbase常见问题QA</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-20T11:45:37+08:00">
+                2019-11-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/大数据/" itemprop="url" rel="index">
+                    <span itemprop="name">大数据</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>HMaster 的作用</strong></p>
+<ul>
+<li>为 region server 分配 region</li>
+<li>负责 region server 的负载均衡</li>
+<li>发现失效的 region server 并重新分配其上的 region</li>
+<li>Gfs 上的垃圾文件回收</li>
+<li>处理 schema 更新请求</li>
+</ul>
+
+          
+        
+      
+    </div>
+    <div>
+          
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/19/spark-qa/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chunen Ni">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞龙在天的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/19/spark-qa/" itemprop="url">Spark常见问题QA</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-19T20:12:50+08:00">
+                2019-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/大数据/" itemprop="url" rel="index">
+                    <span itemprop="name">大数据</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+    <div>
+          
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/19/hive-qa/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chunen Ni">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞龙在天的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/19/hive-qa/" itemprop="url">Hive常见问题QA</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-19T20:12:44+08:00">
+                2019-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/大数据/" itemprop="url" rel="index">
+                    <span itemprop="name">大数据</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+    <div>
+          
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/19/hadoop-qa/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chunen Ni">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞龙在天的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/19/hadoop-qa/" itemprop="url">Hadoop常见问题QA</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-19T20:11:31+08:00">
+                2019-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/大数据/" itemprop="url" rel="index">
+                    <span itemprop="name">大数据</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>讲述 HDFS 上传文件和读文件的流程</strong></p>
+<p>HDFS 上传流程，举例说明一个 256M 的文件上传过程</p>
+<ol>
+<li>由客户端 Client 向 NameNode 节点发出请求</li>
+<li>NameNode 向 Client 返回可以存数据的 DataNode 列表，这里遵循机架感应原则(把副本分别放在不同的机架，甚至不同的数据中心)</li>
+<li>客户端首先根据返回的信息先将文件分块(Hadoop2.X 版本每一个 block 为128M，而之前的版本为 64M)</li>
+<li>通过 NameNode 返回的 DataNode 信息，将文件块以写入方式直接发送给DataNode，同时复制到其他两台机器(默认一份数据，有两个副本)</li>
+<li>数据块传送完成以后，dataNode 向 Client 通信，同时向 NameNode 报告</li>
+<li>依照上面(4)到(5)的原理将所有的数据块都上传，结束后向 NameNode 报告 表明已经传完所有的数据块。</li>
+</ol>
+<p>HDFS 上传流程如下图所示:</p>
+<p><img src="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-11-19-131551.png" alt="page4image18226704.png"> </p>
+<p><strong>HDFS 在上传文件的时候，如果其中一个块突然损坏了怎么办?</strong></p>
+<p>其中一个块坏了，只要有其它块存在，会自动检测还原。</p>
+<p><strong>NameNode 的作用</strong></p>
+<p>namenode 总体来说是管理和记录恢复功能。比如管理 datanode，保持心跳，如果超时则排除。对于上传文件都有镜像 images 和 edits,这些可以用来恢复。</p>
+<p><strong>NameNode 在启动的时候会做哪些操作</strong></p>
+<p>NameNode 启动的时候，会加载 fsimage</p>
+<p>Fsimage 加载过程完成的操作主要是为了:</p>
+<ol>
+<li><p>从 fsimage 中读取该 HDFS 中保存的每一个目录和每一个文件</p>
+</li>
+<li><p>初始化每个目录和文件的元数据信息</p>
+</li>
+<li><p>根据目录和文件的路径，构造出整个 namespace 在内存中的镜像</p>
+</li>
+<li><p>如果是文件，则读取出该文件包含的所有 blockid，并插入到 BlocksMap 中。 整个加载流程如下图所示:</p>
+<p> <img src="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-11-19-132951.png" alt="page6image17828496.png"> </p>
+<p> 如上图所示，namenode 在加载 fsimage 过程其实非常简单，就是从 fsimage 中不停的顺序读取文件和目录的元数据信息，并在内存中构建整个 namespace，同时将每个文件对应的blockid 保存入 BlocksMap 中，此时 BlocksMap 中每个 block 对应的 datanodes 列表暂时为空。 当 fsimage 加载完毕后，整个 HDFS 的目录结构在内存中就已经初始化完毕，所缺的就是每 个文件对应的 block 对应的 datanode 列表信息。这些信息需要从 datanode 的 blockReport 中 获取，所以加载 fsimage 完毕后，namenode 进程进入 rpc 等待状态，等待所有的 datanodes发送 blockReports。</p>
+</li>
+</ol>
+<p><strong>NameNode 的 HA</strong></p>
+<p>NameNode 的 HA 一个备用，一个工作，且一个失败后，另一个被激活。他们通过 journal node 来实现共享数据。</p>
+<p><strong>Hadoop 怎么分片</strong></p>
+<p>HDFS 存储系统中，引入了文件系统的分块概念(block)，块是存储的最小单位，HDFS定义其大小为 64MB。与单磁盘文件系统相似，存储在 HDFS 上的文件均存储为多个块，不 同的是，如果某文件大小没有到达 64MB，该文件也不会占据整个块空间。在分布式的 HDFS集群上，Hadoop 系统 保证一个块存储在一个 datanode 上。</p>
+<p>HDFS 的 namenode 只存储整个文件系统的元数据镜像，这个镜像由配置 dfs.name.dir 指定，datanode 则存有文件的 metainfo 和具体的分块，存储路径由 dfs.data.dir 指定。</p>
+<p>分析完毕分块，下面讨论一下分片:<br>hadoop 的作业在提交过程中，需要把具体的输入进行分片。具体的分片细节由</p>
+<p>InputSplitFormat 指定。分片的规则为 FileInputFormat.class 中的 getSplits()方法指定:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span> splitSize = computeSplitSize(goalSize, minSize, blockSize);</span><br><span class="line">computeSplitSize:</span><br><span class="line">Math.max(minSize, Math.min(goalSize, blockSize));</span><br></pre></td></tr></table></figure>
+<p>其中 goalSize 为“InputFile 大小”/“我们在配置文件中定义的 mapred.map.tasks”值，minsize 为 mapred.min.split.size，blockSize 为 64，所以，这个算式为取分片大小不大于 block， 并且不小于在 mapred.min.split.size 配置中定义的最小 Size。</p>
+<p>当某个分块分成均等的若干分片时，会有最后一个分片大小小于定义的分片大小，则该 分片独立成为一个分片。</p>
+<p><strong>如何减少 Hadoop Map 端到 Reduce 端的数据传输量</strong></p>
+<p>减少传输量，可以让 map 处理完，让同台的 reduce 直接处理，理想情况下，没有数据传输。</p>
+<p><strong>什么是Hadoop 的 Shuffle?</strong> </p>
+<p>hadoop:map 端保存分片数据，通过网络收集到 reduce 端 Shuffle 产生的意义是什么? </p>
+<p>完整地从 map task 端拉取数据到 reduce 端;在跨节点拉取数据时，尽可能地减少对带宽的不必要消耗;减少磁盘 IO 对 task 执行的影响</p>
+<p>每个 map task 都有一个内存缓冲区，存储着 map 的输出结果当缓冲区快满的时候需要将缓冲区的数据以一个临时文件的方式存放到磁盘，当整个 map task 结束后再对磁盘中这个 map task 产生的所有临时文件做合并，生成最终的正式输 出文件，然后等待 reduce task 来拉数据 </p>
+<p><strong>哪些场景才能使用 Combiner 呢?</strong></p>
+<p>Combiner 的输出是 Reducer 的输入，Combiner 绝不能改变最终的计算结果。所以从我的想法来看，Combiner 只应该用于那种 Reduce 的输入 key/value 与输出 key/value 类型完全 一致，且不影响最终结果的场景。比如累加，最大值等。Combiner 的使用一定得慎重，如果用好，它对 job 执行效率有帮助，反之会影响 reduce 的最终结果。</p>
+<p>combiner 最基本是实现本地 key 的聚合，对 map 输出的 key 排序，value 进行迭代。combiner 的目的是减少 map 网络流量。combiner 的对象是对于 map。combiner 具有和 reduce相似的功能。只不过 combiner 合并对象，是对于一个 map。reduce 合并对象，是对于多个map。</p>
+<p><strong>如何实现 hadoop 的安全机制</strong> </p>
+<ol>
+<li><p>共享 hadoop 集群<br>  a: 管理人员把开发人员分成了若干个队列，每个队列有一定的资源，每个用户及用户组只能使用某个队列中指定资源</p>
+<p> b: HDFS 上有各种数据，公用的，私有的，加密的。不用的用户可以访问不同的数据。 </p>
+</li>
+<li><p>HDFS 安全机制</p>
+<p> client 获取 namenode 的初始访问认证( 使用 kerberos )后，会获取一个 delegation token， 这个 token 可以作为接下来访问 HDFS 或提交作业的认证。同样，读取 block 也是一样的</p>
+</li>
+<li><p>mapreduce 安全机制 </p>
+<p>所有关于作业的提交或者作业运行状态的追踪均是采用带有 Kerberos 认证的 RPC 实现 的。授权用户提交作业时，JobTracker 会为之生成一个 delegation token，该 token 将被作为 job 的一部分存储到 HDFS 上并通过 RPC 分发给各个 TaskTracker，一旦 job 运行结束，该 token 失效。 </p>
+</li>
+<li><p>DistributedCache 是安全的</p>
+<p> DistribuedCache 分别两种，一种是 shared，可以被所有作业共享，而 private 的只能被该用户的作业共享</p>
+</li>
+<li><p>RPC 安全机制 </p>
+<p> 在 Hadoop RPC 中添加了权限认证授权机制。当用户调用 RPC 时，用户的 login name 会 通过 RPC 头部传递给 RPC，之后 RPC 使用 Simple Authentication and Security Layer(SASL)确 定一个权限协议(支持 Kerberos 和 DIGEST-MD5 两种)，完成 RPC 授权</p>
+</li>
+</ol>
+<p><strong>hadoop 的调度策略的实现，你们使用的是那种策略，为什么。</strong></p>
+<ol>
+<li><p>默认情况下 hadoop 使用的 FIFO, 先进先出的调度策略。按照作业的优先级来处理。</p>
+</li>
+<li><p>计算能力调度器( Capacity Scheduler ) 支持多个队列，每个队列可配置一定的资源量，每个队列采用 FIFO, 为了防止同一个用户的作业独占资源，那么调度器会对同一个用户提交 的作业所占资源进行限定，首先按以下策略选择一个合适队列:计算每个队列中正在运行的任务数与其应该分得的计算资源之间的比值，选择一个该比值最小的队列;然后按以下 策略选择该队列中一个作业:按照作业优先级和提交时间顺序选择，同时考虑用户资源量限制和内存限制。</p>
+</li>
+<li><p>公平调度器( Fair Scheduler ) 支持多队列多用户，每个队列中的资源量可以配置，同一队列中的作业公平共享队列中所有资源。</p>
+</li>
+<li><p>异构集群的调度器 LATE</p>
+</li>
+<li><p>实时作业的调度器 Deadline Scheduler 和 Constraint-based Scheduler</p>
+</li>
+</ol>
+<p><strong>数据倾斜怎么处理?</strong></p>
+<p>数据倾斜有很多解决方案，本例子简要介绍一种实现方式，假设表 A 和表 B 连接，表A 数据倾斜，只有一个 key 倾斜，首先对 A 进行采样，统计出最倾斜的 key，将 A 表分隔为A1 只有倾斜 key， A2 不包含倾斜 key， 然后分别与 表 B 连接。最后将结果合并， union</p>
+<ul>
+<li><p>KYLIN-2895  Refine Query Cache：<a href="https://issues.apache.org/jira/browse/KYLIN-2895" target="_blank" rel="noopener">https://issues.apache.org/jira/browse/KYLIN-2895</a></p>
+</li>
+<li><ul>
+<li>KYLIN-2899  Introduce segment level query cache：<a href="https://issues.apache.org/jira/browse/KYLIN-2899" target="_blank" rel="noopener">https://issues.apache.org/jira/browse/KYLIN-2899</a></li>
+</ul>
+</li>
+<li><ul>
+<li>KYLIN-2898  Introduce memcached as a distributed cache for queries：<a href="https://issues.apache.org/jira/browse/KYLIN-2898" target="_blank" rel="noopener">https://issues.apache.org/jira/browse/KYLIN-2898</a></li>
+</ul>
+</li>
+<li><ul>
+<li>KYLIN-2894  Change the query cache expiration strategy by signature checking：<a href="https://issues.apache.org/jira/browse/KYLIN-2894" target="_blank" rel="noopener">https://issues.apache.org/jira/browse/KYLIN-2894</a></li>
+</ul>
+</li>
+<li><ul>
+<li>KYLIN-2897  Improve the query execution for a set of duplicate queries in a short period：<a href="https://issues.apache.org/jira/browse/KYLIN-2897" target="_blank" rel="noopener">https://issues.apache.org/jira/browse/KYLIN-2897</a></li>
+</ul>
+</li>
+<li><ul>
+<li>KYLIN-2896  Refine query exception cache：<a href="https://issues.apache.org/jira/browse/KYLIN-2896" target="_blank" rel="noopener">https://issues.apache.org/jira/browse/KYLIN-2896</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    <div>
+          
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/15/jvm-qa/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -716,6 +1580,7 @@
 <li><p>Iterator的方法名是标准化的。</p>
 </li>
 </ul>
+<p>Aaa</p>
 <p><strong>Hashmap如何同步?</strong></p>
 <p>当我们需要一个同步的HashMap时，有两种选择:</p>
 <ul>
@@ -1591,816 +2456,13 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/30/Kylin-s-metadata-base/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chunen Ni">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="飞龙在天的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/03/30/Kylin-s-metadata-base/" itemprop="url">Kylin的元数据基础</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-30T15:00:38+08:00">
-                2019-03-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/大数据/" itemprop="url" rel="index">
-                    <span itemprop="name">大数据</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="Apache-Kylin元数据基础"><a href="#Apache-Kylin元数据基础" class="headerlink" title="Apache Kylin元数据基础"></a>Apache Kylin元数据基础</h3><p>Apache Kylin的元数据包括 立方体描述（cube description）、立方体实例（cube instance）、项目（project）、模型描述（model description）、作业（job）、表（table）、字典(dictionary)等，参见： <a href="http://kylin.apache.org/docs23/gettingstarted/concepts.html" title="Kylin核心概念" target="_blank" rel="noopener">Kylin核心概念</a>。在kylin集群中至关重要，假如元数据丢失，kylin集群将无法工作。</p>
-<p>Kylin源码定义了<code>ResourceStore</code>这一抽象类来定义，其中定义了各种对元数据增删改查的方法，主要方法如：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 根据kylinConfig获得对应的ResourceStore</span></span><br><span class="line"><span class="function">ResourceStore <span class="title">getStore</span><span class="params">(KylinConfig kylinConfig)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// 根据目录获取所有元数据路径</span></span></span><br><span class="line"><span class="function">NavigableSet&lt;String&gt; <span class="title">listResources</span><span class="params">(String folderPath)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// 路径resPath下是否存在元数据</span></span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">exists</span><span class="params">(String resPath)</span></span></span><br><span class="line"><span class="function">  </span></span><br><span class="line"><span class="function"><span class="comment">// 根据路径resPath及序列化器serializer返回对应的元数据</span></span></span><br><span class="line"><span class="function">&lt;T extends RootPersistentEntity&gt; T <span class="title">getResource</span><span class="params">(String resPath, Serializer&lt;T&gt; serializer)</span></span></span><br><span class="line"><span class="function">  </span></span><br><span class="line"><span class="function"><span class="comment">// 根据路径resPath写入元数据</span></span></span><br><span class="line"><span class="function"> <span class="keyword">public</span> &lt;T extends RootPersistentEntity&gt; <span class="keyword">long</span> <span class="title">putResource</span><span class="params">(String resPath, T obj, <span class="keyword">long</span> ts, Serializer&lt;T&gt; serializer)</span></span></span><br><span class="line"><span class="function">  </span></span><br><span class="line"><span class="function"><span class="comment">// 删除路径resPath下的元数据</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">deleteResource</span><span class="params">(String resPath)</span></span></span><br></pre></td></tr></table></figure>
-<p><code>ResourceStore</code>类的主要子类继承关系图如下：</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g228r6g8suj31220c4jrn.jpg" alt></p>
-<p>Kylin支持多种数据源格式，如Hbase、Jdbc等，只要继承<code>ResourceStore</code>类并实现必须的Impl方法即可。</p>
-<p>Kylin的所有序列化的元数据都继承自<code>RootPersistentEntity</code>抽象类，该类及其子类都使用了jackson的JsonAutoDetect注解。 </p>
-<p>例如CubeDesc部分代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">@SuppressWarnings(&quot;serial&quot;)</span><br><span class="line">@JsonAutoDetect(fieldVisibility = Visibility.NONE, getterVisibility = Visibility.NONE, isGetterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)</span><br><span class="line">public class CubeDesc extends RootPersistentEntity implements IEngineAware &#123;</span><br><span class="line">    //...</span><br><span class="line">    @JsonProperty(&quot;name&quot;)</span><br><span class="line">    private String name;</span><br><span class="line">    @JsonProperty(&quot;is_draft&quot;)</span><br><span class="line">    private boolean isDraft;</span><br><span class="line">    @JsonProperty(&quot;model_name&quot;)</span><br><span class="line">    private String modelName;</span><br><span class="line">    @JsonProperty(&quot;description&quot;)</span><br><span class="line">    private String description;</span><br><span class="line">    @JsonProperty(&quot;null_string&quot;)</span><br><span class="line">    private String[] nullStrings;</span><br><span class="line">    @JsonProperty(&quot;dimensions&quot;)</span><br><span class="line">    private List&lt;DimensionDesc&gt; dimensions;</span><br><span class="line">    @JsonProperty(&quot;measures&quot;)</span><br><span class="line">    private List&lt;MeasureDesc&gt; measures;</span><br><span class="line">    @JsonProperty(&quot;dictionaries&quot;)</span><br><span class="line">    @JsonInclude(JsonInclude.Include.NON_NULL)</span><br><span class="line">    private List&lt;DictionaryDesc&gt; dictionaries;</span><br><span class="line">    @JsonProperty(&quot;rowkey&quot;)</span><br><span class="line">    private RowKeyDesc rowkey;</span><br><span class="line">    @JsonProperty(&quot;hbase_mapping&quot;)</span><br><span class="line">    private HBaseMappingDesc hbaseMapping;</span><br><span class="line">    @JsonProperty(&quot;aggregation_groups&quot;)</span><br><span class="line">    private List&lt;AggregationGroup&gt; aggregationGroups;</span><br><span class="line">    // ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>对应在元数据库的json数据如下：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"uuid"</span>:<span class="string">"0ef9b7a8-3929-4dff-b59d-2100aadc8dbf"</span>,</span><br><span class="line">  <span class="attr">"last_modified"</span>:<span class="number">1451468470824</span>,</span><br><span class="line">  <span class="attr">"version"</span>:<span class="string">"%default_version%"</span>,</span><br><span class="line">  <span class="attr">"name"</span>:<span class="string">"kylin_sales_cube"</span>,</span><br><span class="line">  <span class="attr">"is_draft"</span>:<span class="literal">false</span>,</span><br><span class="line">  <span class="attr">"model_name"</span>:<span class="string">"kylin_sales_model"</span>,</span><br><span class="line">  <span class="attr">"description"</span>:<span class="string">""</span>,</span><br><span class="line">  <span class="attr">"null_string"</span>:<span class="literal">null</span>,</span><br><span class="line">  <span class="attr">"dimensions"</span>:[],</span><br><span class="line">  <span class="attr">"measures"</span>:[],</span><br><span class="line">  <span class="attr">"rowkey"</span>:&#123;&#125;,</span><br><span class="line">  <span class="attr">"hbase_mapping"</span>:&#123;&#125;,</span><br><span class="line">  <span class="attr">"aggregation_groups"</span>:[],</span><br><span class="line"> ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    <div>
-          
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/12/osi-tcpip/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chunen Ni">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="飞龙在天的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/03/12/osi-tcpip/" itemprop="url">OSI七层模型的通俗理解</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-12T16:10:24+08:00">
-                2019-03-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/网络/" itemprop="url" rel="index">
-                    <span itemprop="name">网络</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="OSI七层模型的通俗理解"><a href="#OSI七层模型的通俗理解" class="headerlink" title="OSI七层模型的通俗理解"></a>OSI七层模型的通俗理解</h2><p><img src="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-07-09-093142.jpg" alt></p>
-<p>以你和你女朋友以书信的方式进行通信为例。</p>
-<ol>
-<li>物理层：运输工具，比如火车、汽车</li>
-<li>数据链路层：相当于货物核对单，表明里面有些什么东西，接受的时候确认一下是否正确（CRC检验）</li>
-<li>网络层：相当于邮政局或快递公司地址（IP地址），能正确到达对方</li>
-<li>传输层：信封（TCP协议是挂号信，是可靠的；UDP协议是平信，尽力送到对方，不保证一点送到对方）</li>
-<li>会话层：相当于邮票，优质邮票寄一封信，相当与一个会话</li>
-<li>表示层：你用普通话还是用方言？或者是英语？</li>
-<li>应用层：你可以说你的内容了，可以说是你爱她，也可以说你恨她。</li>
-</ol>
-
-          
-        
-      
-    </div>
-    <div>
-          
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/11/gogs-install/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chunen Ni">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="飞龙在天的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/03/11/gogs-install/" itemprop="url">使用gogs安装本地git服务(Centos环境)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-11T11:28:48+08:00">
-                2019-03-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/git/" itemprop="url" rel="index">
-                    <span itemprop="name">git</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="使用gogs安装本地git服务-Centos环境"><a href="#使用gogs安装本地git服务-Centos环境" class="headerlink" title="使用gogs安装本地git服务(Centos环境)"></a>使用gogs安装本地git服务(Centos环境)</h2><h3 id="安装数据库"><a href="#安装数据库" class="headerlink" title="安装数据库"></a>安装数据库</h3><p>Gogs支持MySQL、PostgreSQL、SQLite3、TiDB。安装过程这里不赘述，我们使用的是MySQL。</p>
-<h3 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y git</span><br></pre></td></tr></table></figure>
-<h3 id="添加git用户（gogs期望用git用户操作）"><a href="#添加git用户（gogs期望用git用户操作）" class="headerlink" title="添加git用户（gogs期望用git用户操作）"></a>添加git用户（gogs期望用git用户操作）</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo useradd git</span><br></pre></td></tr></table></figure>
-<h3 id="下载并安装"><a href="#下载并安装" class="headerlink" title="下载并安装"></a>下载并安装</h3><p>根据自己的linux版本在 <a href="https://dl.gogs.io/" target="_blank" rel="noopener">https://dl.gogs.io/</a> 下载安装包，linux版本根据<code>uname -a</code>查看</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://dl.gogs.io/0.11.86/gogs_0.11.86_linux_amd64.tar.gz</span><br></pre></td></tr></table></figure>
-<p>解压</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar  -zxvf gogs_0.11.86_linux_amd64.tar.gz</span><br></pre></td></tr></table></figure>
-<p>进入解压的目录，执行</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd gogs/</span><br><span class="line">./gogs web</span><br></pre></td></tr></table></figure>
-<p>打开${ip}:3000页面，出现如下配置页面</p>
-<p><img src="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-07-09-091212.jpg" alt></p>
-<p>配置完数据库、端口、用户信息等</p>
-<h3 id="运行gogs"><a href="#运行gogs" class="headerlink" title="运行gogs"></a>运行gogs</h3><p>Control+C暂停当前gogs进程，后台运行gogs</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup ./gogs web &amp;</span><br></pre></td></tr></table></figure>
-<p>打开${ip}:3000页面，注册后登陆</p>
-<p><img src="http://nichunen-pic.oss-cn-shanghai.aliyuncs.com/2019-07-09-091226.jpg" alt></p>
-
-          
-        
-      
-    </div>
-    <div>
-          
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/10/hive-cli/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chunen Ni">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="飞龙在天的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/03/10/hive-cli/" itemprop="url">Hive 常用命令</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-10T19:14:42+08:00">
-                2019-03-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/大数据/" itemprop="url" rel="index">
-                    <span itemprop="name">大数据</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="Hive常用命令"><a href="#Hive常用命令" class="headerlink" title="Hive常用命令"></a>Hive常用命令</h3><p>创建表：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> pokes (foo <span class="built_in">INT</span>, bar <span class="keyword">STRING</span>);</span><br></pre></td></tr></table></figure>
-<p>创建一个新表，结构与其他一样：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> new_table <span class="keyword">like</span> <span class="keyword">records</span>;</span><br></pre></td></tr></table></figure>
-<p>创建分区表：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">logs</span>(ts <span class="built_in">bigint</span>,line <span class="keyword">string</span>) partitioned <span class="keyword">by</span> (dt <span class="keyword">String</span>,country <span class="keyword">String</span>);</span><br></pre></td></tr></table></figure>
-<p>加载分区表数据：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> <span class="keyword">local</span> inpath <span class="string">'/home/Hadoop/input/hive/partitions/file1'</span> <span class="keyword">into</span> <span class="keyword">table</span> <span class="keyword">logs</span> <span class="keyword">partition</span> (dt=<span class="string">'2001-01-01'</span>,country=<span class="string">'GB'</span>);</span><br></pre></td></tr></table></figure>
-<p>展示表中有多少分区：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">partitions</span> <span class="keyword">logs</span>;</span><br></pre></td></tr></table></figure>
-<p>展示所有表：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW TABLES;</span><br></pre></td></tr></table></figure>
-<p>显示表的结构信息：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DESCRIBE</span> invites;</span><br></pre></td></tr></table></figure>
-<p>更新表的名称：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> <span class="keyword">source</span> <span class="keyword">RENAME</span> <span class="keyword">TO</span> target;</span><br></pre></td></tr></table></figure>
-<p>添加新一列：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> invites <span class="keyword">ADD</span> <span class="keyword">COLUMNS</span> (new_col2 <span class="built_in">INT</span> <span class="keyword">COMMENT</span> <span class="string">'a comment'</span>);</span><br></pre></td></tr></table></figure>
-<p>添加新的一行：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="keyword">test</span>(<span class="keyword">name</span>,pwd,createdate) <span class="keyword">values</span>(<span class="string">'name1'</span>,<span class="string">'pwd1'</span>,<span class="string">'2017-06-20 14:14:09'</span>);</span><br></pre></td></tr></table></figure>
-<p>删除表：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> <span class="keyword">records</span>;</span><br></pre></td></tr></table></figure>
-<p>删除表中数据，但要保持表的结构定义：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">TRUNCATE</span> <span class="keyword">TABLE</span> table_name</span><br></pre></td></tr></table></figure>
-<p>从本地文件加载数据：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">LOAD</span> <span class="keyword">DATA</span> <span class="keyword">LOCAL</span> INPATH <span class="string">'/home/hadoop/input/ncdc/micro-tab/sample.txt'</span> OVERWRITE <span class="keyword">INTO</span> <span class="keyword">TABLE</span> <span class="keyword">records</span>;</span><br></pre></td></tr></table></figure>
-<p>显示所有函数：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> functions;</span><br></pre></td></tr></table></figure>
-<p>查看函数用法：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">describe</span> <span class="keyword">function</span> <span class="keyword">substr</span>;</span><br></pre></td></tr></table></figure>
-<p>内连接：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> sales., things. <span class="keyword">FROM</span> sales <span class="keyword">JOIN</span> things <span class="keyword">ON</span> (sales.id = things.id);</span><br></pre></td></tr></table></figure>
-<p>查看hive为某个查询使用多少个MapReduce作业:</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Explain</span> <span class="keyword">SELECT</span> sales., things. <span class="keyword">FROM</span> sales <span class="keyword">JOIN</span> things <span class="keyword">ON</span> (sales.id = things.id);</span><br></pre></td></tr></table></figure>
-<p>外连接：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> sales., things. <span class="keyword">FROM</span> sales <span class="keyword">LEFT</span> <span class="keyword">OUTER</span> <span class="keyword">JOIN</span> things <span class="keyword">ON</span> (sales.id = things.id);</span><br></pre></td></tr></table></figure>
-<p>创建视图：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">VIEW</span> valid_records <span class="keyword">AS</span> <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> records2 <span class="keyword">WHERE</span> temperature !=<span class="number">9999</span>;</span><br></pre></td></tr></table></figure>
-<p>INSERT OVERWRITE：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> OVERWRITE <span class="keyword">table</span> tablename1 <span class="keyword">select</span> a, b, c <span class="keyword">from</span> tablename2;</span><br></pre></td></tr></table></figure>
-<p>参考：<a href="https://www.jianshu.com/p/a8e259b973ef" target="_blank" rel="noopener">https://www.jianshu.com/p/a8e259b973ef</a></p>
-
-          
-        
-      
-    </div>
-    <div>
-          
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/07/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chunen Ni">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="飞龙在天的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/07/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-07T00:38:36+08:00">
-                2018-06-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/hello-world/" itemprop="url" rel="index">
-                    <span itemprop="name">hello world</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
-        
-      
-    </div>
-    <div>
-          
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -2444,7 +2506,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2455,7 +2517,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2466,7 +2528,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
