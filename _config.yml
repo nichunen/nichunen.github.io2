@@ -3,16 +3,16 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 徐磊的博客
-subtitle: 全栈开发尝试者
-description: 一直在打杂，从未被超越
-author: Layen Xu
+title: 倪春恩的博客
+subtitle: 大数据开发者
+description: 每天进步一点点
+author: Chunen Ni
 language: zh-Hans
 timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://blog.xulayen.com
+url: https://nichunen.github.io/
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -77,7 +77,10 @@ theme: next
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type:
+  type: git
+  repo: https://github.com/nichunen/nichunen.github.io.git
+  branch: master
+  
 
 search:
   path: search.xml
